@@ -31,10 +31,12 @@
     "async-waterfall": "^0.1.5",
     "basic-browser-request": "^5.0.1",
     "call-next-tick": "^1.1.2",
+    "d3-selection": "^1.0.3",
     "handle-error-web": "^1.0.0",
     "lodash.curry": "^4.1.1",
     "lodash.findwhere": "^3.1.0",
     "lodash.pluck": "^3.1.2",
+    "lodash.without": "^4.4.0",
     "qs": "^6.3.0",
     "standard-bail": "^2.0.1"
   }

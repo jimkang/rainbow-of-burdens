@@ -4,10 +4,11 @@ var callNextTick = require('call-next-tick');
 var curry = require('lodash.curry');
 var sb = require('standard-bail')();
 var waterfall = require('async-waterfall');
+var getDimensionKeyFromProjectTypes = require('./dimension-key-kit').getDimensionKeyFromProjectTypes;
 
 function parseLists(callTrelloAPI, res, lists, parseDone) {
   var portals;
-  var projectsForTypes;
+  var dimensions;
 
   var portalsList = findWhere(lists, {name: 'Portals'});
   var projectsList = findWhere(lists, {name: 'Projects'});
@@ -23,8 +24,8 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
       [
         curry(parsePortals)({portalsListId: portalsList.id, callTrelloAPI: callTrelloAPI}),
         savePortals,
-        curry(parseProjects)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
-        saveProjectsForTypes,
+        curry(parseDimensions)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
+        saveDimensions,
         packResults
       ],
       parseDone
@@ -35,19 +36,19 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
 
   function savePortals(parsed, done) {
     portals = parsed;
-    console.log('portals', portals);
+
     callNextTick(done);
   }
 
-  function saveProjectsForTypes(parsed, done) {
-    projectsForTypes = parsed;
+  function saveDimensions(parsed, done) {
+    dimensions = parsed;
     callNextTick(done);
   }
 
   function packResults(done) {
     var results = {
       portals: portals,
-      projectsForTypes: projectsForTypes
+      dimensions: dimensions
     };
     callNextTick(done, null, results);
   }
@@ -67,23 +68,20 @@ function makePortalFromCard(card) {
   return portal;
 }
 
-function parseProjects({projectsListId, callTrelloAPI}, done) {
-  var projectsForTypes = {};
+function parseDimensions({projectsListId, callTrelloAPI}, done) {
+  var dimensions = {};
   callTrelloAPI({path: `lists/${projectsListId}/cards`}, sb(parseProjectCards, done));
 
   function parseProjectCards(res, cards) {
     // console.log('project cards', cards);
     cards.forEach(putProjectInDimensionsDict);
-    callNextTick(done, null, projectsForTypes);
+    callNextTick(done, null, dimensions);
   }
 
   function putProjectInDimensionsDict(card) {
     var project = makeProjectFromCard(card);
-    project.projectTypes.forEach(putProjectInDictForTypes);
-
-    function putProjectInDictForTypes(projectType) {
-      addToArrayInDict(projectsForTypes, projectType, project);
-    }
+    var dimensionKey = getDimensionKeyFromProjectTypes(project.projectTypes);
+    addToArrayInDict(dimensions, dimensionKey, project);
   }
 }
 

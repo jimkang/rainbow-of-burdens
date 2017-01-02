@@ -8,11 +8,11 @@ var CallTrelloAPI = require('./call-trello-api');
 var curry = require('lodash.curry');
 var findWhere = require('lodash.findwhere');
 var parseLists = require('./parse-lists');
+var render = require('./render');
+var getPossibleDimensionKeysFromProjectTypes = require('./dimension-key-kit').getPossibleDimensionKeysFromProjectTypes;
 
 ((function go() {
   route();
-
-  // trelloTest();
 })());
 
 function route() {
@@ -56,7 +56,7 @@ function getDimensionsFromBoard(token) {
       curry(callTrelloAPI)({path: 'members/me/boards'}),
       getLists,
       curry(parseLists)(callTrelloAPI),
-      formDimensions
+      callRender
     ],
     handleError
   );
@@ -72,8 +72,21 @@ function getDimensionsFromBoard(token) {
   }
 }
 
-function formDimensions(portalsAndProjects, done) {
-  console.log(portalsAndProjects);
-  callNextTick(done);
-}
+function callRender(portalsAndDimensions, done) {
+  console.log(portalsAndDimensions);
+  var selectedPortal = portalsAndDimensions.portals[4];
+  var dimensionKeysForPortal = getPossibleDimensionKeysFromProjectTypes(
+    selectedPortal.projectTypes
+  );
 
+  render({
+    portal: selectedPortal,
+    dimensions: dimensionKeysForPortal.map(getDimensionForKey)
+  });
+  callNextTick(done);
+
+  function getDimensionForKey(key) {
+    console.log('key', key);
+    return portalsAndDimensions.dimensions[key];
+  }
+}
