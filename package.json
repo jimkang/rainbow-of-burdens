@@ -1,7 +1,7 @@
 {
-  "name": "pipes",
+  "name": "dimensions",
   "version": "1.0.0",
-  "description": "View pipes as defined in a Trello board.",
+  "description": "View dimensions as defined in a Trello board.",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jimkang/pipes.git"
+    "url": "git@github.com:jimkang/dimensions.git"
   },
   "keywords": [],
   "author": "Jim Kang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jimkang/pipes/issues"
+    "url": "https://github.com/jimkang/dimensions/issues"
   },
-  "homepage": "https://github.com/jimkang/pipes",
+  "homepage": "https://github.com/jimkang/dimensions",
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "babelify": "^7.3.0",

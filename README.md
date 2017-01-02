@@ -1,7 +1,7 @@
-pipes
+dimensions
 ==================
 
-View pipes as defined in a Trello board.
+View dimensions as defined in a Trello board.
 
 Installation
 ------------

@@ -30,7 +30,7 @@ function route() {
   console.log('token', token);
 
   if (token) {
-    getPipesFromBoard(token);
+    getDimensionsFromBoard(token);
   }
   else {
     var callbackURL = window.location.protocol + '//' +
@@ -49,7 +49,7 @@ function route() {
   }
 }
 
-function getPipesFromBoard(token) {
+function getDimensionsFromBoard(token) {
   var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
 
   waterfall(
@@ -62,12 +62,12 @@ function getPipesFromBoard(token) {
   );
 
   function getLists(res, boards, done) {
-    var pipesBoard = findWhere(boards, {name: 'Pipes'});
-    if (!pipesBoard) {
-      callNextTick(done, new Error('No "Pipes" board found in Trello.'));
+    var dimensionsBoard = findWhere(boards, {name: 'Dimensions'});
+    if (!dimensionsBoard) {
+      callNextTick(done, new Error('No "Dimensions" board found in Trello.'));
     }
     else {
-      callTrelloAPI({path: `boards/${pipesBoard.id}/lists`}, done);
+      callTrelloAPI({path: `boards/${dimensionsBoard.id}/lists`}, done);
     }
   }
 }
@@ -75,7 +75,7 @@ function getPipesFromBoard(token) {
 function parseLists(callTrelloAPI, res, lists, parseDone) {
   console.log(lists);
   var portals;
-  var pipes;
+  var dimensions;
 
   var portalsList = findWhere(lists, {name: 'Portals'});
   var projectsList = findWhere(lists, {name: 'Projects'});
@@ -91,13 +91,13 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
       [
         curry(parsePortals)({portalsListId: portalsList.id, callTrelloAPI: callTrelloAPI}),
         savePortals,
-        curry(parsePipes)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
-        savePipes,
+        curry(parseDimensions)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
+        saveDimensions,
         packResults
       ],
       parseDone
     );
-    // callNextTick(done, null, {portals: portals, pipes: pipes});
+    // callNextTick(done, null, {portals: portals, dimensions: dimensions});
 
   }
 
@@ -107,43 +107,43 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
     callNextTick(done);
   }
 
-  function savePipes(parsed, done) {
-    pipes = parsed;
+  function saveDimensions(parsed, done) {
+    dimensions = parsed;
     callNextTick(done);
   }
 
   function packResults(done) {
     var results = {
       portals: portals,
-      pipes: pipes
+      dimensions: dimensions
     };
     callNextTick(done, null, results);
   }
 }
 
 function parsePortals({portalsListId, callTrelloAPI}, done) {
-  callTrelloAPI({path: `lists/${portalsListId}/cards`}, sb(parseTunnelCards, done));
+  callTrelloAPI({path: `lists/${portalsListId}/cards`}, sb(parsePortalCards, done));
 
-  function parseTunnelCards(res, cards) {
-    done(null, cards.map(makeTunnelFromCard));
+  function parsePortalCards(res, cards) {
+    done(null, cards.map(makePortalFromCard));
   }
 }
 
-function makeTunnelFromCard(card) {
-  var tunnel = {};
+function makePortalFromCard(card) {
+  var portal = {};
   var nameTimeSpanPair = card.name.split(' - ');
   if (nameTimeSpanPair.length > 0) {
-    tunnel.name = nameTimeSpanPair[0];
+    portal.name = nameTimeSpanPair[0];
   }
   if (nameTimeSpanPair.length > 1) {
-    tunnel.weeklyTimeSpan = nameTimeSpanPair[1];
+    portal.weeklyTimeSpan = nameTimeSpanPair[1];
   }
-  tunnel.projectTypes = pluck(card.labels, 'name');
+  portal.projectTypes = pluck(card.labels, 'name');
 
-  return tunnel;
+  return portal;
 }
 
-function parsePipes({projectsListId, callTrelloAPI}, done) {
+function parseDimensions({projectsListId, callTrelloAPI}, done) {
   callTrelloAPI({path: `lists/${projectsListId}/cards`}, sb(parseProjectCards, done));
 
   function parseProjectCards(res, cards) {
