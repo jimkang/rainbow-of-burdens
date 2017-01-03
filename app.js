@@ -9,7 +9,6 @@ var curry = require('lodash.curry');
 var findWhere = require('lodash.findwhere');
 var parseLists = require('./parse-lists');
 var render = require('./render');
-var getPossibleDimensionKeysFromProjectTypes = require('./dimension-key-kit').getPossibleDimensionKeysFromProjectTypes;
 
 ((function go() {
   route();
@@ -74,19 +73,9 @@ function getDimensionsFromBoard(token) {
 
 function callRender(portalsAndDimensions, done) {
   console.log(portalsAndDimensions);
-  var selectedPortal = portalsAndDimensions.portals[4];
-  var dimensionKeysForPortal = getPossibleDimensionKeysFromProjectTypes(
-    selectedPortal.projectTypes
-  );
 
   render({
-    portal: selectedPortal,
-    dimensions: dimensionKeysForPortal.map(getDimensionForKey)
+    portalData: portalsAndDimensions.portals
   });
   callNextTick(done);
-
-  function getDimensionForKey(key) {
-    console.log('key', key);
-    return portalsAndDimensions.dimensions[key];
-  }
 }

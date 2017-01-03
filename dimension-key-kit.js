@@ -1,4 +1,5 @@
 var without = require('lodash.without');
+var flatten = require('lodash.flatten');
 
 var sizeDimensionNames = [
   'main',
@@ -15,7 +16,9 @@ function getDimensionKeyFromProjectTypes(projectTypes) {
   }
   dimensionKey += '|';
   dimensionKey +=
-    without.apply(without, [projectTypes].concat(sizeDimensionNames)).join('|');
+    without.apply(without, [projectTypes].concat(sizeDimensionNames))
+    .sort()
+    .join('|');
 
   return dimensionKey;
 }
@@ -33,7 +36,7 @@ function getPossibleDimensionKeysFromProjectTypes(projectTypes) {
     sizeDimensions.push('side');
   }
   
-  return sizeDimensions.map(getKeysForSizeDimension);
+  return flatten(sizeDimensions.map(getKeysForSizeDimension));
 
   function getKeysForSizeDimension(sizeDimension) {
     return nonSizeDimensions.map(getKeysForNonSizeDimension);
@@ -44,7 +47,12 @@ function getPossibleDimensionKeysFromProjectTypes(projectTypes) {
   }
 }
 
+function getProjectTypesFromKey(key) {
+  return key.split('|');
+}
+
 module.exports = {
   getDimensionKeyFromProjectTypes: getDimensionKeyFromProjectTypes,
-  getPossibleDimensionKeysFromProjectTypes: getPossibleDimensionKeysFromProjectTypes
+  getPossibleDimensionKeysFromProjectTypes: getPossibleDimensionKeysFromProjectTypes,
+  getProjectTypesFromKey: getProjectTypesFromKey
 };

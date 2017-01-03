@@ -4,7 +4,7 @@ var callNextTick = require('call-next-tick');
 var curry = require('lodash.curry');
 var sb = require('standard-bail')();
 var waterfall = require('async-waterfall');
-var getDimensionKeyFromProjectTypes = require('./dimension-key-kit').getDimensionKeyFromProjectTypes;
+var keyKit = require('./dimension-key-kit');
 
 function parseLists(callTrelloAPI, res, lists, parseDone) {
   var portals;
@@ -47,7 +47,7 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
 
   function packResults(done) {
     var results = {
-      portals: portals,
+      portals: portals.map(curry(addDimensionKitsToPortal)(dimensions)),
       dimensions: dimensions
     };
     callNextTick(done, null, results);
@@ -80,7 +80,7 @@ function parseDimensions({projectsListId, callTrelloAPI}, done) {
 
   function putProjectInDimensionsDict(card) {
     var project = makeProjectFromCard(card);
-    var dimensionKey = getDimensionKeyFromProjectTypes(project.projectTypes);
+    var dimensionKey = keyKit.getDimensionKeyFromProjectTypes(project.projectTypes);
     addToArrayInDict(dimensions, dimensionKey, project);
   }
 }
@@ -112,6 +112,23 @@ function parseNameTimeSpanString(s) {
     result.weeklyTimeSpan = nameTimeSpanPair[1];
   }
   return result;
+}
+
+function addDimensionKitsToPortal(dimensions, portal) {
+  var dimensionKeysForPortal = keyKit.getPossibleDimensionKeysFromProjectTypes(
+    portal.projectTypes
+  );
+
+  portal.dimensionKits = dimensionKeysForPortal.map(getDimensionKitForKey);
+  return portal;
+
+  function getDimensionKitForKey(key) {
+    return {
+      id: key.replace(/\|/g, '-'),
+      projectTypes: keyKit.getProjectTypesFromKey(key),
+      projects: dimensions[key]
+    };
+  }
 }
 
 module.exports = parseLists;
