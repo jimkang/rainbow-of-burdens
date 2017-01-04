@@ -9,6 +9,7 @@ var keyKit = require('./dimension-key-kit');
 function parseLists(callTrelloAPI, res, lists, parseDone) {
   var portals;
   var dimensions;
+  var projects;
 
   var portalsList = findWhere(lists, {name: 'Portals'});
   var projectsList = findWhere(lists, {name: 'Projects'});
@@ -24,7 +25,9 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
       [
         curry(parsePortals)({portalsListId: portalsList.id, callTrelloAPI: callTrelloAPI}),
         savePortals,
-        curry(parseDimensions)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
+        curry(parseProjects)({projectsListId: projectsList.id, callTrelloAPI: callTrelloAPI}),
+        saveProjects,
+        makeDimensions,
         saveDimensions,
         packResults
       ],
@@ -36,8 +39,12 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
 
   function savePortals(parsed, done) {
     portals = parsed;
-
     callNextTick(done);
+  }
+
+  function saveProjects(parsed, done) {
+    projects = parsed;
+    callNextTick(done, null, projects);
   }
 
   function saveDimensions(parsed, done) {
@@ -47,8 +54,9 @@ function parseLists(callTrelloAPI, res, lists, parseDone) {
 
   function packResults(done) {
     var results = {
-      portals: portals.map(curry(addDimensionKitsToPortal)(dimensions)),
-      dimensions: dimensions
+      portals: portals,//.map(curry(addDimensionKitsToPortal)(dimensions)),
+      dimensions: dimensions,
+      projects: projects
     };
     callNextTick(done, null, results);
   }
@@ -68,18 +76,21 @@ function makePortalFromCard(card) {
   return portal;
 }
 
-function parseDimensions({projectsListId, callTrelloAPI}, done) {
+function parseProjects({projectsListId, callTrelloAPI}, done) {
   var dimensions = {};
   callTrelloAPI({path: `lists/${projectsListId}/cards`}, sb(parseProjectCards, done));
 
   function parseProjectCards(res, cards) {
-    // console.log('project cards', cards);
-    cards.forEach(putProjectInDimensionsDict);
-    callNextTick(done, null, dimensions);
+    callNextTick(done, null, cards.map(makeProjectFromCard));
   }
+}
 
-  function putProjectInDimensionsDict(card) {
-    var project = makeProjectFromCard(card);
+function makeDimensions(projects, done) {
+  var dimensions = {};
+  projects.forEach(putProjectInDimensionsDict);
+  callNextTick(done, null, dimensions);
+
+  function putProjectInDimensionsDict(project) {
     var dimensionKey = keyKit.getDimensionKeyFromProjectTypes(project.projectTypes);
     addToArrayInDict(dimensions, dimensionKey, project);
   }
@@ -114,21 +125,21 @@ function parseNameTimeSpanString(s) {
   return result;
 }
 
-function addDimensionKitsToPortal(dimensions, portal) {
-  var dimensionKeysForPortal = keyKit.getPossibleDimensionKeysFromProjectTypes(
-    portal.projectTypes
-  );
+// function addDimensionKitsToPortal(dimensions, portal) {
+//   var dimensionKeysForPortal = keyKit.getPossibleDimensionKeysFromProjectTypes(
+//     portal.projectTypes
+//   );
 
-  portal.dimensionKits = dimensionKeysForPortal.map(getDimensionKitForKey);
-  return portal;
+//   portal.dimensionKits = dimensionKeysForPortal.map(getDimensionKitForKey);
+//   return portal;
 
-  function getDimensionKitForKey(key) {
-    return {
-      id: key.replace(/\|/g, '-'),
-      projectTypes: keyKit.getProjectTypesFromKey(key),
-      projects: dimensions[key] || []
-    };
-  }
-}
+//   function getDimensionKitForKey(key) {
+//     return {
+//       id: key.replace(/\|/g, '-'),
+//       projectTypes: keyKit.getProjectTypesFromKey(key),
+//       projects: dimensions[key] || []
+//     };
+//   }
+// }
 
 module.exports = parseLists;

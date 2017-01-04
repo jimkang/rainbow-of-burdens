@@ -12,6 +12,7 @@ var parseLists = require('./parse-lists');
 var renderPortals = require('./representers/render-portals');
 var renderPortalButtons = require('./representers/render-portal-buttons');
 var wireProjectCountSlider = require('./representers/wire-project-count-slider');
+var dimensionKeyKit = require('./dimension-key-kit');
 
 ((function go() {
   route();
@@ -84,7 +85,7 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
       portalsToRender = [findWhere(portalsToRender, {name: portalName})];
     }
 
-    portalsToRender.forEach(cutProjects);
+    portalsToRender.forEach(addProjects);
 
     renderPortals({
       portalData: portalsToRender
@@ -95,6 +96,20 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
     });
 
     callNextTick(done);
+
+    function addProjects(portal) {
+      var potentialKeys = dimensionKeyKit
+        .getPossibleDimensionKeysFromProjectTypes(portal.projectTypes);
+
+      portal.projects = portalsAndDimensions.projects.filter(keyMatches)
+        .slice(0, numberOfProjectsToRender);
+
+      function keyMatches(project) {
+        return potentialKeys.indexOf(
+          dimensionKeyKit.getDimensionKeyFromProjectTypes(project.projectTypes)
+        ) !== -1;
+      }
+    }    
   }
 
   function cutProjects(portal) {

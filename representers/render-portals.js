@@ -15,21 +15,23 @@ function render({portalData}) {
   newPortals.append('h3').classed('portal-name', true);
   newPortals.append('h4').classed('time-span', true);
 
+  newPortals.append('ul').classed('projects', true);
+
   var updatePortals = newPortals.merge(portals);
   updatePortals.selectAll('.portal-name').text(getName);
   updatePortals.selectAll('.time-span').text(getTimeSpanText);
 
-  var dimensions = updatePortals.selectAll('.dimension')
-    .data(accessor('dimensionKits'), accessor());
-  dimensions.exit().remove();
-  var newDimensions = dimensions.enter().append('div').classed('dimension', true);
-  newDimensions.append('h4').classed('dimension-name', true);
-  newDimensions.append('ul').classed('projects', true);
+  // var dimensions = updatePortals.selectAll('.dimension')
+  //   .data(accessor('dimensionKits'), accessor());
+  // dimensions.exit().remove();
+  // var newDimensions = dimensions.enter().append('div').classed('dimension', true);
+  // newDimensions.append('h4').classed('dimension-name', true);
+  // newDimensions.append('ul').classed('projects', true);
 
-  var updateDimensions = newDimensions.merge(dimensions);
-  updateDimensions.selectAll('.dimension-name').text(getDimensionName);
+  // var updateDimensions = newDimensions.merge(dimensions);
+  // updateDimensions.selectAll('.dimension-name').text(getDimensionName);
 
-  var projects = updateDimensions.select('.projects').selectAll('.project')
+  var projects = updatePortals.select('.projects').selectAll('.project')
     .data(accessor('projects'), accessor());
   projects.exit().remove();
   var newProjects = projects.enter().append('li').classed('project', true);
