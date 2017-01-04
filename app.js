@@ -7,11 +7,16 @@ var callNextTick = require('call-next-tick');
 var CallTrelloAPI = require('./call-trello-api');
 var curry = require('lodash.curry');
 var findWhere = require('lodash.findwhere');
+var pluck = require('lodash.pluck');
 var parseLists = require('./parse-lists');
-var render = require('./render');
+var renderPortals = require('./representers/render-portals');
+var renderPortalButtons = require('./representers/render-portal-buttons');
+var wireProjectCountSlider = require('./representers/wire-project-count-slider');
 
 ((function go() {
   route();
+  window.onhashchange = route;
+  wireProjectCountSlider();
 })());
 
 function route() {
@@ -25,10 +30,12 @@ function route() {
     tokenLifeInDays: 30
   });
 
-  console.log('token', token);
-
   if (token) {
-    getDimensionsFromBoard(token);
+    getDimensionsFromBoard({
+      token: token,
+      portalName: routeDict.portal,
+      numberOfProjectsToRender: routeDict.projectcount || 1
+    });
   }
   else {
     var callbackURL = window.location.protocol + '//' +
@@ -47,7 +54,7 @@ function route() {
   }
 }
 
-function getDimensionsFromBoard(token) {
+function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
   var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
 
   waterfall(
@@ -69,13 +76,34 @@ function getDimensionsFromBoard(token) {
       callTrelloAPI({path: `boards/${dimensionsBoard.id}/lists`}, done);
     }
   }
-}
 
-function callRender(portalsAndDimensions, done) {
-  console.log(portalsAndDimensions);
+  function callRender(portalsAndDimensions, done) {
+    console.log(portalsAndDimensions);
+    var portalsToRender = portalsAndDimensions.portals;
+    if (portalName) {
+      portalsToRender = [findWhere(portalsToRender, {name: portalName})];
+    }
 
-  render({
-    portalData: portalsAndDimensions.portals
-  });
-  callNextTick(done);
+    portalsToRender.forEach(cutProjects);
+
+    renderPortals({
+      portalData: portalsToRender
+    });
+
+    renderPortalButtons({
+      portalNames: pluck(portalsAndDimensions.portals, 'name')
+    });
+
+    callNextTick(done);
+  }
+
+  function cutProjects(portal) {
+    portal.dimensionKits.forEach(cutProjectsInDimension);
+  }
+
+  function cutProjectsInDimension(dimensionKit) {
+    if (dimensionKit && dimensionKit.projects) {
+      dimensionKit.projects = dimensionKit.projects.slice(0, numberOfProjectsToRender);
+    }
+  }
 }

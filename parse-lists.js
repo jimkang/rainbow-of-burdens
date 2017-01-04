@@ -126,7 +126,7 @@ function addDimensionKitsToPortal(dimensions, portal) {
     return {
       id: key.replace(/\|/g, '-'),
       projectTypes: keyKit.getProjectTypesFromKey(key),
-      projects: dimensions[key]
+      projects: dimensions[key] || []
     };
   }
 }

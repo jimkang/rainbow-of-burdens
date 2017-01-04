@@ -29,7 +29,7 @@ function render({portalData}) {
   var updateDimensions = newDimensions.merge(dimensions);
   updateDimensions.selectAll('.dimension-name').text(getDimensionName);
 
-  var projects = updateDimensions.selectAll('.project')
+  var projects = updateDimensions.select('.projects').selectAll('.project')
     .data(accessor('projects'), accessor());
   projects.exit().remove();
   var newProjects = projects.enter().append('li').classed('project', true);

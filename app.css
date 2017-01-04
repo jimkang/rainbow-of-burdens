@@ -1,3 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 body {
-  font-family: "helvetica neue";
+  background-color: #222;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 24px;
+  color: #fff;
+}
+
+.portals {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.portal {
+  border: solid 2px purple;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 1em;
+}
+
+.portal-name {
+  font-size: 2em;
+  font-family: futura;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+.dimension {
+  border: solid white 2px;
+  border-radius: 0.5em;
+  padding: 1em;
+}
+
+.dimension-name {
+  margin-top: 0;
+}
+
+.projects {
+  list-style-type: none;
+}
+
+.project-name {
+  /* font-weight: bold; */
+  font-size: larger;
+  font-family: futura;
+  text-transform: uppercase;
 }
