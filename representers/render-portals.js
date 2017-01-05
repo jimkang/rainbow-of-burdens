@@ -65,7 +65,7 @@ function renderProjects(portals, projectRootClass, projectsPropertyName) {
 }
 
 function getTimeSpanText(d) {
-  return d.weeklyTimeSpan + ' hours per week';
+  return d.weeklyTimeSpan + ' hours';
 }
 
 // function getDimensionName(dimensionKit) {
