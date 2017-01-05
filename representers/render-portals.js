@@ -4,6 +4,10 @@ var accessor = require('accessor');
 
 var getName = accessor('name');
 
+function identity(x) {
+  return x;
+}
+
 function render({portalData}) {
   console.log('portals', portalData);
   var portalsRoot = d3.select('.portals');
@@ -15,11 +19,15 @@ function render({portalData}) {
   newPortals.append('h3').classed('portal-name', true);
   newPortals.append('h4').classed('time-span', true);
 
-  newPortals.append('ul').classed('projects', true);
+  newPortals.append('ul').classed('projects', true).classed('main-projects', true);
+  newPortals.append('ul').classed('projects', true).classed('side-projects', true);
 
   var updatePortals = newPortals.merge(portals);
   updatePortals.selectAll('.portal-name').text(getName);
   updatePortals.selectAll('.time-span').text(getTimeSpanText);
+
+  renderProjects(updatePortals, 'main-projects', 'mainProjects');
+  renderProjects(updatePortals, 'side-projects', 'sideProjects');
 
   // var dimensions = updatePortals.selectAll('.dimension')
   //   .data(accessor('dimensionKits'), accessor());
@@ -31,24 +39,37 @@ function render({portalData}) {
   // var updateDimensions = newDimensions.merge(dimensions);
   // updateDimensions.selectAll('.dimension-name').text(getDimensionName);
 
-  var projects = updatePortals.select('.projects').selectAll('.project')
-    .data(accessor('projects'), accessor());
+
+}
+
+function renderProjects(portals, projectRootClass, projectsPropertyName) {
+  var projects = portals.select('.' + projectRootClass).selectAll('.project')
+    .data(accessor(projectsPropertyName), accessor());
   projects.exit().remove();
+
   var newProjects = projects.enter().append('li').classed('project', true);
   newProjects.append('div').classed('project-name', true);
   newProjects.append('div').classed('project-time-span', true);
+  newProjects.append('div').classed('project-types', true);
 
   var updateProjects = newProjects.merge(projects);
   updateProjects.selectAll('.project-name').text(getName);
   updateProjects.selectAll('.project-time-span').text(getTimeSpanText);
+
+  var projectTypes = updateProjects.selectAll('.project-types')
+    .selectAll('.project-type')
+    .data(accessor('projectTypes'), identity);
+  projectTypes.exit().remove();
+  projectTypes.enter().append('span').classed('project-type', true)
+    .merge(projectTypes).text(identity);
 }
 
 function getTimeSpanText(d) {
   return d.weeklyTimeSpan + ' hours per week';
 }
 
-function getDimensionName(dimensionKit) {
-  return dimensionKit.projectTypes.join(' ');
-}
+// function getDimensionName(dimensionKit) {
+//   return dimensionKit.projectTypes.join(' ');
+// }
 
 module.exports = render;

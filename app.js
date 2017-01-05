@@ -101,24 +101,49 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
       var potentialKeys = dimensionKeyKit
         .getPossibleDimensionKeysFromProjectTypes(portal.projectTypes);
 
-      portal.projects = portalsAndDimensions.projects.filter(keyMatches)
-        .slice(0, numberOfProjectsToRender);
+      portal.mainProjects = [];
+      portal.sideProjects = [];
 
-      function keyMatches(project) {
-        return potentialKeys.indexOf(
-          dimensionKeyKit.getDimensionKeyFromProjectTypes(project.projectTypes)
-        ) !== -1;
+      portalsAndDimensions.projects.some(addProject);
+
+        // keyMatches)
+        // .slice(0, numberOfProjectsToRender);
+
+      function addProject(project) {
+        var dimensionKey = dimensionKeyKit
+          .getDimensionKeyFromProjectTypes(project.projectTypes);
+        
+        if (potentialKeys.indexOf(dimensionKey) !== -1) {
+          if (project.projectTypes.indexOf('main') !== -1) {
+            if (portal.mainProjects.length < numberOfProjectsToRender) {
+              portal.mainProjects.push(project);
+            }
+          }
+          else {
+            if (portal.sideProjects.length < numberOfProjectsToRender) {
+              portal.sideProjects.push(project);
+            }
+          }
+
+          if (portal.mainProjects.length >= numberOfProjectsToRender &&
+            portal.sideProjects.length >= numberOfProjectsToRender) {
+
+            // Stop adding projects; we have enough.
+            return true;
+          }
+        }
+        return false;        
       }
-    }    
-  }
-
-  function cutProjects(portal) {
-    portal.dimensionKits.forEach(cutProjectsInDimension);
-  }
-
-  function cutProjectsInDimension(dimensionKit) {
-    if (dimensionKit && dimensionKit.projects) {
-      dimensionKit.projects = dimensionKit.projects.slice(0, numberOfProjectsToRender);
     }
   }
+
+  // function cutProjects(portal) {
+  //   portal.dimensionKits.forEach(cutProjectsInDimension);
+  // }
+
+  // function cutProjectsInDimension(dimensionKit) {
+  //   if (dimensionKit && dimensionKit.projects) {
+  //     dimensionKit.projects = dimensionKit.projects.slice(0, numberOfProjectsToRender);
+  //   }
+  // }
 }

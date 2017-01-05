@@ -77,7 +77,7 @@ function makePortalFromCard(card) {
 }
 
 function parseProjects({projectsListId, callTrelloAPI}, done) {
-  var dimensions = {};
+  // var dimensions = {};
   callTrelloAPI({path: `lists/${projectsListId}/cards`}, sb(parseProjectCards, done));
 
   function parseProjectCards(res, cards) {

@@ -38,13 +38,20 @@ body {
   margin-top: 0;
 }
 
-.projects {
+a {
   list-style-type: none;
 }
 
 .project-name {
-  /* font-weight: bold; */
   font-size: larger;
   font-family: futura;
   text-transform: uppercase;
+}
+
+.project-type {
+  font-style: italic;
+}
+
+.project-type::after {
+  content: " ";
 }
