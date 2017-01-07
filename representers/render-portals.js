@@ -24,7 +24,7 @@ function render({portalData}) {
 
   var updatePortals = newPortals.merge(portals);
   updatePortals.selectAll('.portal-name').text(getName);
-  updatePortals.selectAll('.time-span').text(getTimeSpanText);
+  updatePortals.selectAll('.time-span').text(getPortalTimeSpanText);
 
   renderProjects(updatePortals, 'main-projects', 'mainProjects');
   renderProjects(updatePortals, 'side-projects', 'sideProjects');
@@ -54,7 +54,7 @@ function renderProjects(portals, projectRootClass, projectsPropertyName) {
 
   var updateProjects = newProjects.merge(projects);
   updateProjects.selectAll('.project-name').text(getName);
-  updateProjects.selectAll('.project-time-span').text(getTimeSpanText);
+  updateProjects.selectAll('.project-time-span').text(getProjectTimeSpanText);
 
   var projectTypes = updateProjects.selectAll('.project-types')
     .selectAll('.project-type')
@@ -64,8 +64,12 @@ function renderProjects(portals, projectRootClass, projectsPropertyName) {
     .merge(projectTypes).text(identity);
 }
 
-function getTimeSpanText(d) {
-  return d.weeklyTimeSpan + ' hours';
+function getPortalTimeSpanText(portal) {
+  return portal.weeklyTimeSpan + ' hours';
+}
+
+function getProjectTimeSpanText(project) {
+  return project.neededTimeSpanTotal + ' hours';
 }
 
 // function getDimensionName(dimensionKit) {

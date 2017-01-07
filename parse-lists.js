@@ -71,7 +71,7 @@ function parsePortals({portalsListId, callTrelloAPI}, done) {
 }
 
 function makePortalFromCard(card) {
-  var portal = parseNameTimeSpanString(card.name);
+  var portal = parseNameTimeSpanString(card.name, 'weeklyTimeSpan');
   portal.projectTypes = pluck(card.labels, 'name');
   return portal;
 }
@@ -107,20 +107,20 @@ function addToArrayInDict(dict, key, value) {
 }
 
 function makeProjectFromCard(card) {
-  var project = parseNameTimeSpanString(card.name);
+  var project = parseNameTimeSpanString(card.name, 'neededTimeSpanTotal');
   project.id = card.id;
   project.projectTypes = pluck(card.labels, 'name');
   return project;
 }
 
-function parseNameTimeSpanString(s) {
+function parseNameTimeSpanString(s, timeSpanProperty) {
   var result = {};
   var nameTimeSpanPair = s.split(' - ');
   if (nameTimeSpanPair.length > 0) {
     result.name = nameTimeSpanPair[0];
   }
   if (nameTimeSpanPair.length > 1) {
-    result.weeklyTimeSpan = nameTimeSpanPair[1];
+    result[timeSpanProperty] = nameTimeSpanPair[1];
   }
   return result;
 }

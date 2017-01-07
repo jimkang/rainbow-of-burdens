@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Morning",
+    "weeklyTimeSpan": "5",
+    "projectTypes": [
+      "concentrating",
+      "main"
+    ]
+  },
+  {
+    "name": "Evening",
+    "weeklyTimeSpan": "5",
+    "projectTypes": [
+      "mechanical",
+      "main",
+      "side"
+    ]
+  },
+  {
+    "name": "Late night",
+    "weeklyTimeSpan": "2",
+    "projectTypes": [
+      "mechanical",
+      "side"
+    ]
+  },
+  {
+    "name": "Saturday afternoon",
+    "weeklyTimeSpan": "2",
+    "projectTypes": [
+      "main",
+      "side",
+      "mechanical",
+      "outside"
+    ]
+  },
+  {
+    "name": "Sunday afternoon",
+    "weeklyTimeSpan": "2",
+    "projectTypes": [
+      "main",
+      "side",
+      "outside",
+      "mechanical",
+      "concentrating"
+    ]
+  }
+]

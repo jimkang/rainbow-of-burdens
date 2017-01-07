@@ -13,6 +13,7 @@ var renderPortals = require('./representers/render-portals');
 var renderPortalButtons = require('./representers/render-portal-buttons');
 var wireProjectCountSlider = require('./representers/wire-project-count-slider');
 var dimensionKeyKit = require('./dimension-key-kit');
+var calculateCompletion = require('./calculate-completion');
 
 ((function go() {
   route();
@@ -63,6 +64,7 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
       curry(callTrelloAPI)({path: 'members/me/boards'}),
       getLists,
       curry(parseLists)(callTrelloAPI),
+      getCompletionTimes,
       callRender
     ],
     handleError
@@ -76,6 +78,12 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
     else {
       callTrelloAPI({path: `boards/${dimensionsBoard.id}/lists`}, done);
     }
+  }
+
+  function getCompletionTimes(portalsAndDimensions, done) {
+    portalsAndDimensions.completionEstimate = calculateCompletion(portalsAndDimensions);
+    console.log('completion estimate', portalsAndDimensions.completionEstimate);
+    callNextTick(done, null, portalsAndDimensions);
   }
 
   function callRender(portalsAndDimensions, done) {
