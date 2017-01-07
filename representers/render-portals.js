@@ -10,7 +10,7 @@ function identity(x) {
 
 function render({portalData}) {
   console.log('portals', portalData);
-  var portalsRoot = d3.select('.portals');
+  var portalsRoot = d3.select('#portals');
   var portals = portalsRoot.selectAll('.portal').data(portalData, getName);
 
   portals.exit().remove();
