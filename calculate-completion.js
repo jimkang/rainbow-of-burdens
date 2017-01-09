@@ -2,9 +2,8 @@ var cloneDeep = require('lodash.clonedeep');
 var dimensionKeyKit = require('./dimension-key-kit');
 
 function calculateCompletion({projects, portals}) {
-  // console.log(JSON.stringify(projects, null, '  '));
-  // console.log(JSON.stringify(portals, null, '  '));
-
+  // This variable is named "weeks", but it can be whatever time span the portal
+  // is described in.
   var weeks = [];
   var simProjects = projects.filter(projectIsValid).map(makeSimProject);
   if (portals.length < 1) {

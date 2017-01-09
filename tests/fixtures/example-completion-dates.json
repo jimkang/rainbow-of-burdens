@@ -1,0 +1,377 @@
+[
+  {
+    "completedInSpan": 0,
+    "completedSpanLabel": "Week 1",
+    "approximateDate": 1484438400000,
+    "completedProject": {
+      "name": "Build pipe viewer",
+      "neededTimeSpanTotal": "4",
+      "id": "5863c48ee390b6d48247a356",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 0,
+    "completedSpanLabel": "Week 1",
+    "approximateDate": 1484438400000,
+    "completedProject": {
+      "name": "Write description for meetup",
+      "neededTimeSpanTotal": "1",
+      "id": "585ddec7244748a54d4a130a",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 1,
+    "completedSpanLabel": "Week 2",
+    "approximateDate": 1485043200000,
+    "completedProject": {
+      "name": "Research blood rituals",
+      "neededTimeSpanTotal": "2",
+      "id": "5863c7703e635bfa827ea199",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 4,
+    "completedSpanLabel": "Week 5",
+    "approximateDate": 1486857600000,
+    "completedProject": {
+      "name": "Mall generator",
+      "neededTimeSpanTotal": "20",
+      "id": "585ddda7aee01406fe59d997",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 4,
+    "completedSpanLabel": "Week 5",
+    "approximateDate": 1486857600000,
+    "completedProject": {
+      "name": "Fix turn signal",
+      "neededTimeSpanTotal": "1",
+      "id": "5863c49f93b7239f44e21040",
+      "projectTypes": [
+        "main",
+        "outside"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 4,
+    "completedSpanLabel": "Week 5",
+    "approximateDate": 1486857600000,
+    "completedProject": {
+      "name": "Get other headlight installed",
+      "neededTimeSpanTotal": "2",
+      "id": "5863c4a629822c9183866ca4",
+      "projectTypes": [
+        "main",
+        "outside"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 4,
+    "completedSpanLabel": "Week 5",
+    "approximateDate": 1486857600000,
+    "completedProject": {
+      "name": "Plan trips for 2017",
+      "neededTimeSpanTotal": "3",
+      "id": "5863ccc83df33e4e5b229815",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 5,
+    "completedSpanLabel": "Week 6",
+    "approximateDate": 1487462400000,
+    "completedProject": {
+      "name": "Project listing",
+      "neededTimeSpanTotal": "3",
+      "id": "585e9707fd98aa4d4a38b877",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 8,
+    "completedSpanLabel": "Week 9",
+    "approximateDate": 1489276800000,
+    "completedProject": {
+      "name": "Compendium",
+      "neededTimeSpanTotal": "20",
+      "id": "585ddf2138f5d2cc6e793284",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 11,
+    "completedSpanLabel": "Week 12",
+    "approximateDate": 1491091200000,
+    "completedProject": {
+      "name": "Bot box",
+      "neededTimeSpanTotal": "20",
+      "id": "5863cb90fe3d967fc849ff79",
+      "projectTypes": [
+        "concentrating",
+        "main"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 13,
+    "completedSpanLabel": "Week 14",
+    "approximateDate": 1492300800000,
+    "completedProject": {
+      "name": "Rogue-like, basics working mechanically",
+      "neededTimeSpanTotal": "20",
+      "id": "5863c83832b75a703dcd7d4f",
+      "projectTypes": [
+        "main",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 14,
+    "completedSpanLabel": "Week 15",
+    "approximateDate": 1492905600000,
+    "completedProject": {
+      "name": "Get back the refund from the city",
+      "neededTimeSpanTotal": "2",
+      "id": "585ddd20babf6a93af57bcc0",
+      "projectTypes": [
+        "main",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 14,
+    "completedSpanLabel": "Week 15",
+    "approximateDate": 1492905600000,
+    "completedProject": {
+      "name": "Email about drive",
+      "neededTimeSpanTotal": "1",
+      "id": "5863c7fdeaa82b784548e5f3",
+      "projectTypes": [
+        "main",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 14,
+    "completedSpanLabel": "Week 15",
+    "approximateDate": 1492905600000,
+    "completedProject": {
+      "name": "Create budget",
+      "neededTimeSpanTotal": "2",
+      "id": "5863cce5e00b0ef233aec90d",
+      "projectTypes": [
+        "main",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 15,
+    "completedSpanLabel": "Week 16",
+    "approximateDate": 1493510400000,
+    "completedProject": {
+      "name": "Add roadside assistance to insurance",
+      "neededTimeSpanTotal": "0.25",
+      "id": "585dde488390bdfcafb671df",
+      "projectTypes": [
+        "side",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 15,
+    "completedSpanLabel": "Week 16",
+    "approximateDate": 1493510400000,
+    "completedProject": {
+      "name": "Send game to cousin's family",
+      "neededTimeSpanTotal": "0.25",
+      "id": "585ddeb2d7d40e1608d5b51c",
+      "projectTypes": [
+        "side",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 15,
+    "completedSpanLabel": "Week 16",
+    "approximateDate": 1493510400000,
+    "completedProject": {
+      "name": "Reenable bots",
+      "neededTimeSpanTotal": "1",
+      "id": "5863c56a2813ffa61d971517",
+      "projectTypes": [
+        "side",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 15,
+    "completedSpanLabel": "Week 16",
+    "approximateDate": 1493510400000,
+    "completedProject": {
+      "name": "Buy shoes",
+      "neededTimeSpanTotal": "0.25",
+      "id": "585dde4f0a01881ffd09860e",
+      "projectTypes": [
+        "side",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 15,
+    "completedSpanLabel": "Week 16",
+    "approximateDate": 1493510400000,
+    "completedProject": {
+      "name": "Set up computer for Dad",
+      "neededTimeSpanTotal": "2",
+      "id": "5863ccb6167127932b85d6df",
+      "projectTypes": [
+        "side",
+        "mechanical"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 18,
+    "completedSpanLabel": "Week 19",
+    "approximateDate": 1495324800000,
+    "completedProject": {
+      "name": "Rhyme bot",
+      "neededTimeSpanTotal": "8",
+      "id": "5863cc2900a1a91b6bd19ff1",
+      "projectTypes": [
+        "side",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 21,
+    "completedSpanLabel": "Week 22",
+    "approximateDate": 1497139200000,
+    "completedProject": {
+      "name": "Group conversation bots",
+      "neededTimeSpanTotal": "6",
+      "id": "5863cc5bb4945038454b4e56",
+      "projectTypes": [
+        "side",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 23,
+    "completedSpanLabel": "Week 24",
+    "approximateDate": 1498348800000,
+    "completedProject": {
+      "name": "Language bot",
+      "neededTimeSpanTotal": "4",
+      "id": "5863cd1c881a28fb6a914259",
+      "projectTypes": [
+        "side",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 25,
+    "completedSpanLabel": "Week 26",
+    "approximateDate": 1499558400000,
+    "completedProject": {
+      "name": "Council bot",
+      "neededTimeSpanTotal": "4",
+      "id": "5863cb56ae9cee43d5d5fae7",
+      "projectTypes": [
+        "concentrating",
+        "side"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 27,
+    "completedSpanLabel": "Week 28",
+    "approximateDate": 1500768000000,
+    "completedProject": {
+      "name": "Twitter searcher",
+      "neededTimeSpanTotal": "4",
+      "id": "5863cc7ecba45e9ec877f07b",
+      "projectTypes": [
+        "side",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  },
+  {
+    "completedInSpan": 28,
+    "completedSpanLabel": "Week 29",
+    "approximateDate": 1501372800000,
+    "completedProject": {
+      "name": "asdf",
+      "neededTimeSpanTotal": "3",
+      "id": "5863cc3d152ebc275eeed410",
+      "projectTypes": [
+        "side",
+        "concentrating"
+      ],
+      "hoursLeft": 0
+    }
+  }
+]

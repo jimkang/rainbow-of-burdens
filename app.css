@@ -55,3 +55,27 @@ a {
 .project-type::after {
   content: " ";
 }
+
+#time-line {
+  stroke: red;
+  width: 10px;
+}
+
+#time-markers {
+  transform: translate(0, 40);
+  transform: translate(0, 40);
+}
+
+#timeline-board {
+  width: 100%;
+  height: 1500px;
+}
+
+#timeline-board text {
+  fill: #fff;
+  /* stroke: none; */
+}
+
+#timeline-board circle {
+  fill: red;
+}

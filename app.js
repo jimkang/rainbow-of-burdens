@@ -11,9 +11,11 @@ var pluck = require('lodash.pluck');
 var parseLists = require('./parse-lists');
 var renderPortals = require('./representers/render-portals');
 var renderPortalButtons = require('./representers/render-portal-buttons');
+var renderTimeline = require('./representers/render-timeline');
 var wireProjectCountSlider = require('./representers/wire-project-count-slider');
 var dimensionKeyKit = require('./dimension-key-kit');
 var calculateCompletion = require('./calculate-completion');
+var extractCompletionDates = require('./extract-completion-dates');
 
 ((function go() {
   route();
@@ -102,6 +104,15 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
     renderPortalButtons({
       portalNames: pluck(portalsAndDimensions.portals, 'name')
     });
+
+    var completionDates = extractCompletionDates({
+      timeSpanLog: portalsAndDimensions.completionEstimate,
+      timeSpanUnit: 'week',
+      timeSpanMS: 7 * 24 * 60 * 60 * 1000,
+      startDate: new Date()
+    });
+    console.log('completionDates:', completionDates);
+    renderTimeline({completionDates: completionDates});
 
     callNextTick(done);
 
