@@ -12,6 +12,7 @@ build:
 
 test:
 	node tests/calculate-completion-tests.js
+	node tests/extract-dates-tests.js
 
 pushall:
 	git push origin gh-pages
