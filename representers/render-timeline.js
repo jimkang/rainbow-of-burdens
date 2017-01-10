@@ -8,7 +8,6 @@ function renderTimeline({completionDates}) {
   markers.exit().remove();
   var newMarkers = markers.enter().append('g').classed('time-marker', true);
   newMarkers.append('circle').attr('r', '5').attr('cx', 200);
-  // TODO: Try tspan for this.
   newMarkers.append('text').classed('date-label', true).attr('x', 0);
   newMarkers.append('text').classed('project-label', true)
     .attr('transform', 'translate(300, 0)')
@@ -21,6 +20,11 @@ function renderTimeline({completionDates}) {
     .text(getProjectNames)
     .call(wrap, 600);
   updateMarkers.attr('transform', getMarkerTransform);
+
+  var timelineLength = (completionDates[completionDates.length - 1]
+    .completedInSpan + 1) * 100;
+  d3.select('#time-line').attr('d', 'M200,0L200,' + timelineLength);
+  d3.select('#timeline-board').attr('height', timelineLength);
 }
 
 function getProjectNames(completionDateInfo) {
