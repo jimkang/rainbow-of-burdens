@@ -1,7 +1,7 @@
 [
   {
     "name": "Morning",
-    "weeklyTimeSpan": "5",
+    "hoursPerSpan": "5",
     "projectTypes": [
       "concentrating",
       "main"
@@ -9,7 +9,7 @@
   },
   {
     "name": "Evening",
-    "weeklyTimeSpan": "5",
+    "hoursPerSpan": "5",
     "projectTypes": [
       "mechanical",
       "main",
@@ -18,7 +18,7 @@
   },
   {
     "name": "Late night",
-    "weeklyTimeSpan": "2",
+    "hoursPerSpan": "2",
     "projectTypes": [
       "mechanical",
       "side"
@@ -26,7 +26,7 @@
   },
   {
     "name": "Saturday afternoon",
-    "weeklyTimeSpan": "2",
+    "hoursPerSpan": "2",
     "projectTypes": [
       "main",
       "side",
@@ -36,7 +36,7 @@
   },
   {
     "name": "Sunday afternoon",
-    "weeklyTimeSpan": "2",
+    "hoursPerSpan": "2",
     "projectTypes": [
       "main",
       "side",

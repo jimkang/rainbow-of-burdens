@@ -1,26 +1,28 @@
 var cloneDeep = require('lodash.clonedeep');
 var dimensionKeyKit = require('./dimension-key-kit');
 
-function calculateCompletion({projects, portals}) {
-  // This variable is named "weeks", but it can be whatever time span the portal
+function calculateCompletion({
+  projects, portals, breakAfterEveryNSpans = -1, numberOfSpansInABreak = 0}) {
+
+  // This variable is named "spans", but it can be whatever time span the portal
   // is described in.
-  var weeks = [];
+  var spans = [];
   var simProjects = projects.filter(projectIsValid).map(makeSimProject);
   if (portals.length < 1) {
-    return weeks;
+    return spans;
   }
 
   while (simProjects.length > 0) {
-    // Renew portals each week. Do not renew projects.
-    weeks.push(workForAWeek(simProjects, portals.map(makeSimPortal)));
-    // console.log(weeks.length, 'weeks');
+    // Renew portals each span. Do not renew projects.
+    spans.push(workForASpan(simProjects, portals.map(makeSimPortal)));
+    // console.log(spans.length, 'spans');
     // console.log('Remaining projects:', simProjects.map(p => p.name));
-    if (weeks.length > 520) {
+    if (spans.length > 520) {
       break;
     }
   }
 
-  return weeks;
+  return spans;
 }
 
 function makeSimProject(project) {
@@ -31,11 +33,12 @@ function makeSimProject(project) {
 
 function makeSimPortal(portal) {
   var simPortal = cloneDeep(portal);
-  simPortal.hoursLeft = simPortal.weeklyTimeSpan;
+  simPortal.hoursLeft = simPortal.hoursPerSpan;
   return simPortal;
 }
 
-function workForAWeek(projects, portals) {
+function workForASpan(projects, portals) {
+  console.log('portals for this week:', portals)
   var weekLog = {
     projectsWorkedOnInPortals: {},
     projectsCompleted: []
@@ -43,16 +46,16 @@ function workForAWeek(projects, portals) {
 
   var completedProjectsIndexes = [];
 
-  projects.some(workOnProjectForAWeek);
+  projects.some(workOnProjectForASpan);
   removeItemsAtIndexes(projects, completedProjectsIndexes);
   return weekLog;
 
   // Returns true if project is complete.
-  function workOnProjectForAWeek(project, projectIndex) {
-    portals.some(workOnProjectForAWeekInPortal);
+  function workOnProjectForASpan(project, projectIndex) {
+    portals.some(workOnProjectForASpanInPortal);
 
     // Returns true if project is complete or portal is depleted.
-    function workOnProjectForAWeekInPortal(portal) {
+    function workOnProjectForASpanInPortal(portal) {
       if (portal.hoursLeft < 0.01) {
         return true;
       }

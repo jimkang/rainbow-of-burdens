@@ -65,7 +65,7 @@ function renderProjects(portals, projectRootClass, projectsPropertyName) {
 }
 
 function getPortalTimeSpanText(portal) {
-  return portal.weeklyTimeSpan + ' hours';
+  return portal.hoursPerSpan + ' hours';
 }
 
 function getProjectTimeSpanText(project) {

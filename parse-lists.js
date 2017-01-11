@@ -71,7 +71,7 @@ function parsePortals({portalsListId, callTrelloAPI}, done) {
 }
 
 function makePortalFromCard(card) {
-  var portal = parseNameTimeSpanString(card.name, 'weeklyTimeSpan');
+  var portal = parseNameTimeSpanString(card.name, 'hoursPerSpan');
   portal.projectTypes = pluck(card.labels, 'name');
   return portal;
 }
