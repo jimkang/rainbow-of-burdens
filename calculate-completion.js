@@ -1,8 +1,7 @@
 var cloneDeep = require('lodash.clonedeep');
 var dimensionKeyKit = require('./dimension-key-kit');
 
-function calculateCompletion({
-  projects, portals, breakAfterEveryNSpans = -1, numberOfSpansInABreak = 0}) {
+function calculateCompletion({projects, portals}) {
 
   // This variable is named "spans", but it can be whatever time span the portal
   // is described in.
@@ -38,7 +37,7 @@ function makeSimPortal(portal) {
 }
 
 function workForASpan(projects, portals) {
-  console.log('portals for this week:', portals)
+  // console.log('portals for this week:', portals);
   var weekLog = {
     projectsWorkedOnInPortals: {},
     projectsCompleted: []

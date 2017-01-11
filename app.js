@@ -38,7 +38,9 @@ function route() {
     getDimensionsFromBoard({
       token: token,
       portalName: routeDict.portal,
-      numberOfProjectsToRender: routeDict.projectcount || 1
+      numberOfProjectsToRender: routeDict.projectcount || 1,
+      breakAfterEveryNSpans: routeDict.breakAfterEveryNSpans,
+      numberOfSpansInABreak: routeDict.numberOfSpansInABreak
     });
   }
   else {
@@ -58,7 +60,8 @@ function route() {
   }
 }
 
-function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
+function getDimensionsFromBoard({
+  token, portalName, numberOfProjectsToRender, breakAfterEveryNSpans, numberOfSpansInABreak}) {
   var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
 
   waterfall(
@@ -109,7 +112,9 @@ function getDimensionsFromBoard({token, portalName, numberOfProjectsToRender}) {
       timeSpanLog: portalsAndDimensions.completionEstimate,
       timeSpanUnit: 'week',
       timeSpanMS: 7 * 24 * 60 * 60 * 1000,
-      startDate: new Date()
+      startDate: new Date(),
+      breakAfterEveryNSpans: breakAfterEveryNSpans,
+      numberOfSpansInABreak: numberOfSpansInABreak
     });
     console.log('completionDates:', completionDates);
     renderTimeline({completionDates: completionDates});
