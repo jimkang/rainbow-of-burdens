@@ -1,5 +1,6 @@
 var d3 = require('d3-selection');
 var accessor = require('accessor');
+var probable = require('probable');
 // var findWhere = require('lodash.findwhere');
 
 var getName = accessor('name');
@@ -23,6 +24,10 @@ function render({portalData}) {
   newPortals.append('ul').classed('projects', true).classed('side-projects', true);
 
   var updatePortals = newPortals.merge(portals);
+  updatePortals.style(
+    'border-image',
+    `linear-gradient(${getRandomBrightColor()}, ${getRandomBrightColor()}) 10`,
+  );
   updatePortals.selectAll('.portal-name').text(getName);
   updatePortals.selectAll('.time-span').text(getPortalTimeSpanText);
 
@@ -75,5 +80,9 @@ function getProjectTimeSpanText(project) {
 // function getDimensionName(dimensionKit) {
 //   return dimensionKit.projectTypes.join(' ');
 // }
+
+function getRandomBrightColor() {
+  return `hsl(${probable.roll(360)}, 100%, 50%)`;
+}
 
 module.exports = render;

@@ -23,7 +23,7 @@ function renderTimeline({completionDates}) {
 
   var timelineLength = (completionDates[completionDates.length - 1]
     .completedInSpan + 1) * 100;
-  d3.select('#time-line').attr('d', 'M200,0L200,' + timelineLength);
+  d3.select('#time-line').attr('height', timelineLength);
   d3.select('#timeline-board').attr('height', timelineLength);
 }
 

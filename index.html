@@ -19,8 +19,18 @@
 
 <section id="projections">
   <svg id="timeline-board">
-    <path id="time-line">
-    </path>
+    <defs>
+      <linearGradient id="rainbow" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%"   stop-color="hsl(0, 100%, 50%)"/>
+        <stop offset="20%"   stop-color="hsl(60, 100%, 50%)"/>
+        <stop offset="55%"   stop-color="hsl(120, 100%, 50%)"/>
+        <stop offset="60%"   stop-color="hsl(180, 80%, 40%)"/>
+        <stop offset="70%"   stop-color="hsl(240, 80%, 40%)"/>
+        <stop offset="100%"   stop-color="hsl(300, 80%, 30%)"/>
+      </linearGradient>
+    </defs>    
+    <rect id="time-line" width="2" x="199" y="0" fill="url(#rainbow)">
+    </rect>
     <g id="time-markers" transform="translate(0, 40)">
     </g>
     </g>

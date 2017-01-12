@@ -13,10 +13,10 @@ body {
 }
 
 .portal {
-  border: solid 2px purple;
+  border: solid 2px;
   padding: 1em;
   margin: 1em;
-  border-radius: 1em;
+  /*border-radius: 1em;*/
 }
 
 .portal-name {
@@ -57,8 +57,7 @@ a {
 }
 
 #time-line {
-  stroke: red;
-  width: 10px;
+  width: 2px;
 }
 
 #time-markers {
