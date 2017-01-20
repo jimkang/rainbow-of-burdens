@@ -34,13 +34,20 @@ function route() {
     tokenLifeInDays: 30
   });
 
+  var timeSpanMS = routeDict.timeSpanMS;
+  if (!timeSpanMS && routeDict.timeSpanUnit === 'day') {
+    timeSpanMS = 24 * 60 * 60 * 1000;
+  }
+
   if (token) {
     getDimensionsFromBoard({
       token: token,
       portalName: routeDict.portal,
       numberOfProjectsToRender: routeDict.projectcount || 1,
       breakAfterEveryNSpans: routeDict.breakAfterEveryNSpans,
-      numberOfSpansInABreak: routeDict.numberOfSpansInABreak
+      numberOfSpansInABreak: routeDict.numberOfSpansInABreak,
+      timeSpanUnit: routeDict.timeSpanUnit,
+      timeSpanMS: timeSpanMS
     });
   }
   else {
@@ -61,7 +68,15 @@ function route() {
 }
 
 function getDimensionsFromBoard({
-  token, portalName, numberOfProjectsToRender, breakAfterEveryNSpans, numberOfSpansInABreak}) {
+    token,
+    portalName,
+    numberOfProjectsToRender,
+    breakAfterEveryNSpans,
+    numberOfSpansInABreak,
+    timeSpanUnit = 'week',
+    timeSpanMS = 7 * 24 * 60 * 60 * 1000
+  }) {
+
   var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
 
   waterfall(
@@ -110,8 +125,8 @@ function getDimensionsFromBoard({
 
     var completionDates = extractCompletionDates({
       timeSpanLog: portalsAndDimensions.completionEstimate,
-      timeSpanUnit: 'week',
-      timeSpanMS: 7 * 24 * 60 * 60 * 1000,
+      timeSpanUnit: timeSpanUnit,
+      timeSpanMS: timeSpanMS,
       startDate: new Date(),
       breakAfterEveryNSpans: breakAfterEveryNSpans,
       numberOfSpansInABreak: numberOfSpansInABreak

@@ -26,7 +26,7 @@ function render({portalData}) {
   var updatePortals = newPortals.merge(portals);
   updatePortals.style(
     'border-image',
-    `linear-gradient(${getRandomBrightColor()}, ${getRandomBrightColor()}) 10`,
+    `linear-gradient(${getRandomBrightColor()}, ${getRandomBrightColor()}) 10`
   );
   updatePortals.selectAll('.portal-name').text(getName);
   updatePortals.selectAll('.time-span').text(getPortalTimeSpanText);

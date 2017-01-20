@@ -34,7 +34,6 @@ function extractCompletionDates({
     for (var i = 0; i < projectsCompletedPerSpan.length; ++i) {
       withBreaks.push(projectsCompletedPerSpan[i]);
       if ((i + 1) % breakAfterEveryNSpans === 0) {
-        debugger;
         for (let j = 0; j < numberOfSpansInABreak; ++j) {
           withBreaks.push([]);
         }
