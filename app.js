@@ -47,7 +47,8 @@ function route() {
       breakAfterEveryNSpans: routeDict.breakAfterEveryNSpans,
       numberOfSpansInABreak: routeDict.numberOfSpansInABreak,
       timeSpanUnit: routeDict.timeSpanUnit,
-      timeSpanMS: timeSpanMS
+      timeSpanMS: timeSpanMS,
+      boardName: routeDict.board
     });
   }
   else {
@@ -74,7 +75,8 @@ function getDimensionsFromBoard({
     breakAfterEveryNSpans,
     numberOfSpansInABreak,
     timeSpanUnit = 'week',
-    timeSpanMS = 7 * 24 * 60 * 60 * 1000
+    timeSpanMS = 7 * 24 * 60 * 60 * 1000,
+    boardName = 'Dimensions'
   }) {
 
   var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
@@ -91,7 +93,7 @@ function getDimensionsFromBoard({
   );
 
   function getLists(res, boards, done) {
-    var dimensionsBoard = findWhere(boards, {name: 'Dimensions'});
+    var dimensionsBoard = findWhere(boards, {name: boardName});
     if (!dimensionsBoard) {
       callNextTick(done, new Error('No "Dimensions" board found in Trello.'));
     }
