@@ -10,7 +10,6 @@ function extractCompletionDates({
   breakAfterEveryNSpans = -1,
   numberOfSpansInABreak = 0
 }) {
-
   var projectsCompletedPerSpan = pluck(timeSpanLog, 'projectsCompleted');
   if (breakAfterEveryNSpans !== -1) {
     projectsCompletedPerSpan = addBreakSpans(projectsCompletedPerSpan);
@@ -23,7 +22,9 @@ function extractCompletionDates({
       return {
         completedInSpan: spanIndex,
         completedSpanLabel: toTitleCase(timeSpanUnit + ' ' + (spanIndex + 1)),
-        approximateDate: (new Date(startDateMS + timeSpanMS * (spanIndex + 1))).getTime(),
+        approximateDate: new Date(
+          startDateMS + timeSpanMS * (spanIndex + 1)
+        ).getTime(),
         completedProjects: projectsCompletedInSpan
       };
     }

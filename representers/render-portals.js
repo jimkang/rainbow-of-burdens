@@ -9,19 +9,24 @@ function identity(x) {
   return x;
 }
 
-function render({portalData}) {
+function render({ portalData }) {
   console.log('portals', portalData);
   var portalsRoot = d3.select('#portals');
   var portals = portalsRoot.selectAll('.portal').data(portalData, getName);
 
   portals.exit().remove();
 
-  var newPortals = portals.enter().append('section').classed('portal', true);
+  var newPortals = portals
+    .enter()
+    .append('section')
+    .classed('portal', true);
   newPortals.append('h3').classed('portal-name', true);
   newPortals.append('h4').classed('time-span', true);
 
-  newPortals.append('ul').classed('projects', true).classed('main-projects', true);
-  newPortals.append('ul').classed('projects', true).classed('side-projects', true);
+  newPortals
+    .append('ul')
+    .classed('projects', true)
+    .classed('main-projects', true);
 
   var updatePortals = newPortals.merge(portals);
   updatePortals.style(
@@ -32,7 +37,6 @@ function render({portalData}) {
   updatePortals.selectAll('.time-span').text(getPortalTimeSpanText);
 
   renderProjects(updatePortals, 'main-projects', 'mainProjects');
-  renderProjects(updatePortals, 'side-projects', 'sideProjects');
 
   // var dimensions = updatePortals.selectAll('.dimension')
   //   .data(accessor('dimensionKits'), accessor());
@@ -43,16 +47,19 @@ function render({portalData}) {
 
   // var updateDimensions = newDimensions.merge(dimensions);
   // updateDimensions.selectAll('.dimension-name').text(getDimensionName);
-
-
 }
 
 function renderProjects(portals, projectRootClass, projectsPropertyName) {
-  var projects = portals.select('.' + projectRootClass).selectAll('.project')
+  var projects = portals
+    .select('.' + projectRootClass)
+    .selectAll('.project')
     .data(accessor(projectsPropertyName), accessor());
   projects.exit().remove();
 
-  var newProjects = projects.enter().append('li').classed('project', true);
+  var newProjects = projects
+    .enter()
+    .append('li')
+    .classed('project', true);
   newProjects.append('div').classed('project-name', true);
   newProjects.append('div').classed('project-time-span', true);
   newProjects.append('div').classed('project-types', true);
@@ -61,12 +68,17 @@ function renderProjects(portals, projectRootClass, projectsPropertyName) {
   updateProjects.selectAll('.project-name').text(getName);
   updateProjects.selectAll('.project-time-span').text(getProjectTimeSpanText);
 
-  var projectTypes = updateProjects.selectAll('.project-types')
+  var projectTypes = updateProjects
+    .selectAll('.project-types')
     .selectAll('.project-type')
     .data(accessor('projectTypes'), identity);
   projectTypes.exit().remove();
-  projectTypes.enter().append('span').classed('project-type', true)
-    .merge(projectTypes).text(identity);
+  projectTypes
+    .enter()
+    .append('span')
+    .classed('project-type', true)
+    .merge(projectTypes)
+    .text(identity);
 }
 
 function getPortalTimeSpanText(portal) {

@@ -15,7 +15,11 @@ function extractTest(t) {
     startDate: new Date('2017-01-08')
   });
   // console.log(JSON.stringify(completionDates, null, '  '));
-  t.deepEqual(completionDates, testResults, 'Resulting completion dates are correct.');
+  t.deepEqual(
+    completionDates,
+    testResults,
+    'Resulting completion dates are correct.'
+  );
   t.end();
 }
 
@@ -30,6 +34,10 @@ function breaksTest(t) {
   });
 
   // console.log(JSON.stringify(completionDates, null, '  '));
-  t.deepEqual(completionDates, testResultsWithBreaks, 'Resulting completion dates are correct.');
+  t.deepEqual(
+    completionDates,
+    testResultsWithBreaks,
+    'Resulting completion dates are correct.'
+  );
   t.end();
 }

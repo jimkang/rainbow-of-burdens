@@ -17,11 +17,11 @@ var dimensionKeyKit = require('./dimension-key-kit');
 var calculateCompletion = require('./calculate-completion');
 var extractCompletionDates = require('./extract-completion-dates');
 
-((function go() {
+(function go() {
   route();
   window.onhashchange = route;
   wireProjectCountSlider();
-})());
+})();
 
 function route() {
   // Skip the # part of the hash.
@@ -29,7 +29,7 @@ function route() {
 
   var token = findToken({
     routeDict: routeDict,
-    store: window.localStorage, 
+    store: window.localStorage,
     currentDate: new Date(),
     tokenLifeInDays: 30
   });
@@ -50,13 +50,15 @@ function route() {
       timeSpanMS: timeSpanMS,
       boardName: routeDict.board
     });
-  }
-  else {
-    var callbackURL = window.location.protocol + '//' +
+  } else {
+    var callbackURL =
+      window.location.protocol +
+      '//' +
       window.location.host +
       window.location.pathname;
 
-    window.location = 'https://trello.com/1/authorize?' +
+    window.location =
+      'https://trello.com/1/authorize?' +
       qs.stringify({
         callback_method: 'fragment',
         return_url: callbackURL,
@@ -69,21 +71,20 @@ function route() {
 }
 
 function getDimensionsFromBoard({
-    token,
-    portalName,
-    numberOfProjectsToRender,
-    breakAfterEveryNSpans,
-    numberOfSpansInABreak,
-    timeSpanUnit = 'week',
-    timeSpanMS = 7 * 24 * 60 * 60 * 1000,
-    boardName = 'Dimensions'
-  }) {
-
-  var callTrelloAPI = CallTrelloAPI({key: config.trello.key, token: token});
+  token,
+  portalName,
+  numberOfProjectsToRender,
+  breakAfterEveryNSpans,
+  numberOfSpansInABreak,
+  timeSpanUnit = 'week',
+  timeSpanMS = 7 * 24 * 60 * 60 * 1000,
+  boardName = 'Dimensions'
+}) {
+  var callTrelloAPI = CallTrelloAPI({ key: config.trello.key, token: token });
 
   waterfall(
     [
-      curry(callTrelloAPI)({path: 'members/me/boards'}),
+      curry(callTrelloAPI)({ path: 'members/me/boards' }),
       getLists,
       curry(parseLists)(callTrelloAPI),
       getCompletionTimes,
@@ -93,17 +94,18 @@ function getDimensionsFromBoard({
   );
 
   function getLists(res, boards, done) {
-    var dimensionsBoard = findWhere(boards, {name: boardName});
+    var dimensionsBoard = findWhere(boards, { name: boardName });
     if (!dimensionsBoard) {
       callNextTick(done, new Error('No "Dimensions" board found in Trello.'));
-    }
-    else {
-      callTrelloAPI({path: `boards/${dimensionsBoard.id}/lists`}, done);
+    } else {
+      callTrelloAPI({ path: `boards/${dimensionsBoard.id}/lists` }, done);
     }
   }
 
   function getCompletionTimes(portalsAndDimensions, done) {
-    portalsAndDimensions.completionEstimate = calculateCompletion(portalsAndDimensions);
+    portalsAndDimensions.completionEstimate = calculateCompletion(
+      portalsAndDimensions
+    );
     console.log('completion estimate', portalsAndDimensions.completionEstimate);
     callNextTick(done, null, portalsAndDimensions);
   }
@@ -112,7 +114,7 @@ function getDimensionsFromBoard({
     console.log(portalsAndDimensions);
     var portalsToRender = portalsAndDimensions.portals;
     if (portalName) {
-      portalsToRender = [findWhere(portalsToRender, {name: portalName})];
+      portalsToRender = [findWhere(portalsToRender, { name: portalName })];
     }
 
     portalsToRender.forEach(addProjects);
@@ -134,46 +136,36 @@ function getDimensionsFromBoard({
       numberOfSpansInABreak: numberOfSpansInABreak
     });
     console.log('completionDates:', completionDates);
-    renderTimeline({completionDates: completionDates});
+    renderTimeline({ completionDates: completionDates });
 
     callNextTick(done);
 
     function addProjects(portal) {
-      var potentialKeys = dimensionKeyKit
-        .getPossibleDimensionKeysFromProjectTypes(portal.projectTypes);
+      var potentialKeys = portal.projectTypes;
 
       portal.mainProjects = [];
-      portal.sideProjects = [];
 
       portalsAndDimensions.projects.some(addProject);
 
-        // keyMatches)
-        // .slice(0, numberOfProjectsToRender);
+      // keyMatches)
+      // .slice(0, numberOfProjectsToRender);
 
       function addProject(project) {
-        var dimensionKey = dimensionKeyKit
-          .getDimensionKeyFromProjectTypes(project.projectTypes);
-        
+        var dimensionKey = dimensionKeyKit.getDimensionKeyFromProjectTypes(
+          project.projectTypes
+        );
+
         if (potentialKeys.indexOf(dimensionKey) !== -1) {
-          if (project.projectTypes.indexOf('main') !== -1) {
-            if (portal.mainProjects.length < numberOfProjectsToRender) {
-              portal.mainProjects.push(project);
-            }
-          }
-          else {
-            if (portal.sideProjects.length < numberOfProjectsToRender) {
-              portal.sideProjects.push(project);
-            }
+          if (portal.mainProjects.length < numberOfProjectsToRender) {
+            portal.mainProjects.push(project);
           }
 
-          if (portal.mainProjects.length >= numberOfProjectsToRender &&
-            portal.sideProjects.length >= numberOfProjectsToRender) {
-
+          if (portal.mainProjects.length >= numberOfProjectsToRender) {
             // Stop adding projects; we have enough.
             return true;
           }
         }
-        return false;        
+        return false;
       }
     }
   }

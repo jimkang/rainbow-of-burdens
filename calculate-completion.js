@@ -1,8 +1,7 @@
 var cloneDeep = require('lodash.clonedeep');
 var dimensionKeyKit = require('./dimension-key-kit');
 
-function calculateCompletion({projects, portals}) {
-
+function calculateCompletion({ projects, portals }) {
   // This variable is named "spans", but it can be whatever time span the portal
   // is described in.
   var spans = [];
@@ -74,8 +73,7 @@ function workForASpan(projects, portals) {
           weekLog.projectsCompleted.push(project);
           completedProjectsIndexes.unshift(projectIndex);
           return true;
-        }
-        else {
+        } else {
           project.hoursLeft -= portal.hoursLeft;
           portal.hoursLeft = 0;
         }
@@ -85,12 +83,12 @@ function workForASpan(projects, portals) {
 }
 
 function projectCanBeWorkedOnInPortal(project, portal) {
-  var potentialKeys = dimensionKeyKit
-    .getPossibleDimensionKeysFromProjectTypes(portal.projectTypes);
+  var potentialKeys = portal.projectTypes;
 
-  var dimensionKey = dimensionKeyKit
-    .getDimensionKeyFromProjectTypes(project.projectTypes);
-  
+  var dimensionKey = dimensionKeyKit.getDimensionKeyFromProjectTypes(
+    project.projectTypes
+  );
+
   return potentialKeys.indexOf(dimensionKey) !== -1;
 }
 

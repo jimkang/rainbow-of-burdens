@@ -8,7 +8,10 @@ var calculateCompletion = require('../calculate-completion');
 test('Calculate completion', calculateTest);
 
 function calculateTest(t) {
-  var weeks = calculateCompletion({projects: testProjects, portals: testPortals});
+  var weeks = calculateCompletion({
+    projects: testProjects,
+    portals: testPortals
+  });
   // console.log(JSON.stringify(weeks, null, '  '));
   console.log('Number of weeks:', weeks.length);
   t.deepEqual(weeks, testResults, 'Resulting weeks are correct.');

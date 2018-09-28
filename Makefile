@@ -17,5 +17,6 @@ test:
 pushall:
 	git push origin gh-pages
 
-lint:
-	eslint .
+prettier:
+	prettier --single-quote --write "**/*.js"
+
