@@ -21,9 +21,9 @@ function extractCompletionDates({
     if (projectsCompletedInSpan && projectsCompletedInSpan.length > 0) {
       return {
         completedInSpan: spanIndex,
-        completedSpanLabel: toTitleCase(timeSpanUnit + ' ' + (spanIndex + 1)),
+        completedSpanLabel: toTitleCase(timeSpanUnit + ' ' + spanIndex),
         approximateDate: new Date(
-          startDateMS + timeSpanMS * (spanIndex + 1)
+          startDateMS + timeSpanMS * spanIndex
         ).getTime(),
         completedProjects: projectsCompletedInSpan
       };
