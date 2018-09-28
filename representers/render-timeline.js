@@ -2,6 +2,8 @@ var d3 = require('d3-selection');
 var pluck = require('lodash.pluck');
 var accessor = require('accessor');
 
+const heightBetweenEvents = 120;
+
 function renderTimeline({ completionDates }) {
   var markers = d3
     .select('#time-markers')
@@ -21,22 +23,24 @@ function renderTimeline({ completionDates }) {
     .classed('date-label', true)
     .attr('x', 0);
   newMarkers
-    .append('text')
+    .append('foreignObject')
+    .attr('transform', 'translate(300, -50)')
+    .attr('width', '80%')
+    .attr('height', heightBetweenEvents)
+    .append('xhtml:div')
     .classed('project-label', true)
-    .attr('transform', 'translate(300, 0)')
     .attr('dx', 0)
     .attr('dy', 0);
 
   var updateMarkers = newMarkers.merge(markers);
   updateMarkers.selectAll('.date-label').text(getDateText);
-  updateMarkers
-    .selectAll('.project-label')
-    .text(getProjectNames)
-    .call(wrap, 600);
+  updateMarkers.selectAll('.project-label').text(getProjectNames);
+  //.call(wrap, 1200);
   updateMarkers.attr('transform', getMarkerTransform);
 
   var timelineLength =
-    (completionDates[completionDates.length - 1].completedInSpan + 1) * 100;
+    (completionDates[completionDates.length - 1].completedInSpan + 1) *
+    heightBetweenEvents;
   d3.select('#time-line').attr('height', timelineLength);
   d3.select('#timeline-board').attr('height', timelineLength);
 }
@@ -50,43 +54,11 @@ function getDateText(completionDateInfo) {
 }
 
 function getMarkerTransform(completionDateInfo) {
-  return 'translate(0, ' + completionDateInfo.completedInSpan * 100 + ')';
+  return (
+    'translate(0, ' +
+    completionDateInfo.completedInSpan * heightBetweenEvents +
+    ')'
+  );
 }
 
-function wrap(text, width) {
-  text.each(function() {
-    var text = d3.select(this),
-      words = text
-        .text()
-        .split(/\s+/)
-        .reverse(),
-      word,
-      line = [],
-      lineNumber = 0,
-      lineHeight = 1.1, // ems
-      y = text.attr('y'),
-      dy = parseFloat(text.attr('dy')),
-      tspan = text
-        .text(null)
-        .append('tspan')
-        .attr('x', 0)
-        .attr('y', y)
-        .attr('dy', dy + 'em');
-    while ((word = words.pop())) {
-      line.push(word);
-      tspan.text(line.join(' '));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(' '));
-        line = [word];
-        tspan = text
-          .append('tspan')
-          .attr('x', 0)
-          .attr('y', y)
-          .attr('dy', ++lineNumber * lineHeight + dy + 'em')
-          .text(word);
-      }
-    }
-  });
-}
 module.exports = renderTimeline;
