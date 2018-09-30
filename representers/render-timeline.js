@@ -46,7 +46,7 @@ function renderTimeline({ completionDates }) {
 }
 
 function getProjectNames(completionDateInfo) {
-  return pluck(completionDateInfo.completedProjects, 'name').join(', ');
+  return pluck(completionDateInfo.completedProjects, 'name').join(' | ');
 }
 
 function getDateText(completionDateInfo) {
