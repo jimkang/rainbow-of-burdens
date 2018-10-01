@@ -2,8 +2,6 @@ var cloneDeep = require('lodash.clonedeep');
 var dimensionKeyKit = require('./dimension-key-kit');
 
 function calculateCompletion({ projects, portals }) {
-  // This variable is named "spans", but it can be whatever time span the portal
-  // is described in.
   var spans = [];
   var simProjects = projects.filter(projectIsValid).map(makeSimProject);
   if (portals.length < 1) {
@@ -25,12 +23,13 @@ function calculateCompletion({ projects, portals }) {
 
 function makeSimProject(project) {
   var simProject = cloneDeep(project);
-  simProject.hoursLeft = simProject.neededTimeSpanTotal;
+  simProject.hoursLeft = +simProject.neededTimeSpanTotal;
   return simProject;
 }
 
 function makeSimPortal(portal) {
   var simPortal = cloneDeep(portal);
+  simPortal.hoursPerSpan = +simPortal.hoursPerSpan;
   simPortal.hoursLeft = simPortal.hoursPerSpan;
   return simPortal;
 }
