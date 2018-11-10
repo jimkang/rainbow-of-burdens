@@ -67,7 +67,6 @@ function route() {
 
 function getDimensionsFromBoard({
   token,
-  numberOfProjectsToRender,
   breakAfterEveryNSpans,
   numberOfSpansInABreak,
   timeSpanUnit = 'week',
@@ -96,20 +95,19 @@ function getDimensionsFromBoard({
     }
   }
 
-  function getCompletionTimes(portalsAndDimensions, done) {
-    portalsAndDimensions.completionEstimate = calculateCompletion(
-      portalsAndDimensions
-    );
-    console.log('completion estimate', portalsAndDimensions.completionEstimate);
-    callNextTick(done, null, portalsAndDimensions);
+  function getCompletionTimes(projects, done) {
+    var results = {
+      projects,
+      completionEstimate: calculateCompletion(projects)
+    };
+    console.log('completion estimate', results.completionEstimate);
+    callNextTick(done, null, results);
   }
 
-  function callRender(portalsAndDimensions, done) {
-    console.log(portalsAndDimensions);
-    var portalsToRender = portalsAndDimensions.portals;
-    portalsToRender.forEach(addProjects);
+  function callRender(results, done) {
+    console.log(results);
     var completionDates = extractCompletionDates({
-      timeSpanLog: portalsAndDimensions.completionEstimate,
+      timeSpanLog: results.completionEstimate,
       timeSpanUnit: timeSpanUnit,
       timeSpanMS: timeSpanMS,
       startDate: new Date(),
@@ -118,23 +116,6 @@ function getDimensionsFromBoard({
     });
     console.log('completionDates:', completionDates);
     renderTimeline({ completionDates: completionDates });
-
     callNextTick(done);
-
-    function addProjects(portal) {
-      portal.mainProjects = [];
-
-      portalsAndDimensions.projects.some(addProject);
-
-      function addProject(project) {
-        if (portal.mainProjects.length < numberOfProjectsToRender) {
-          portal.mainProjects.push(project);
-          return false;
-        } else {
-          // Stop adding projects; we have enough.
-          return true;
-        }
-      }
-    }
   }
 }

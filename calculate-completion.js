@@ -1,18 +1,15 @@
 var cloneDeep = require('lodash.clonedeep');
-var dimensionKeyKit = require('./dimension-key-kit');
+const hoursPerWeek = 10; // TODO: Parameterize
 
-function calculateCompletion({ projects, portals }) {
+function calculateCompletion(projects) {
   var spans = [];
   var simProjects = projects.filter(projectIsValid).map(makeSimProject);
-  if (portals.length < 1) {
-    return spans;
-  }
 
   while (simProjects.length > 0) {
-    // Renew portals each span. Do not renew projects.
-    spans.push(workForASpan(simProjects, portals.map(makeSimPortal)));
-    // console.log(spans.length, 'spans');
-    // console.log('Remaining projects:', simProjects.map(p => p.name));
+    // Renew workPeriods each span. Do not renew projects.
+    spans.push(workForASpan(simProjects, makeSimWorkPeriod(hoursPerWeek)));
+    console.log(spans.length, 'spans');
+    console.log('Remaining projects:', simProjects.map(p => p.name));
     if (spans.length > 520) {
       break;
     }
@@ -27,17 +24,15 @@ function makeSimProject(project) {
   return simProject;
 }
 
-function makeSimPortal(portal) {
-  var simPortal = cloneDeep(portal);
-  simPortal.hoursPerSpan = +simPortal.hoursPerSpan;
-  simPortal.hoursLeft = simPortal.hoursPerSpan;
-  return simPortal;
+function makeSimWorkPeriod(hoursPerWorkPeriod) {
+  return {
+    hoursPerSpan: hoursPerWorkPeriod,
+    hoursLeft: hoursPerWorkPeriod
+  };
 }
 
-function workForASpan(projects, portals) {
-  // console.log('portals for this week:', portals);
+function workForASpan(projects, workPeriod) {
   var weekLog = {
-    projectsWorkedOnInPortals: {},
     projectsCompleted: []
   };
 
@@ -47,48 +42,22 @@ function workForASpan(projects, portals) {
   removeItemsAtIndexes(projects, completedProjectsIndexes);
   return weekLog;
 
-  // Returns true if project is complete.
+  // Returns true if there are no hours left.
   function workOnProjectForASpan(project, projectIndex) {
-    portals.some(workOnProjectForASpanInPortal);
+    if (workPeriod.hoursLeft < 0.01) {
+      return true;
+    }
 
-    // Returns true if project is complete or portal is depleted.
-    function workOnProjectForASpanInPortal(portal) {
-      if (portal.hoursLeft < 0.01) {
-        return true;
-      }
-
-      var projectLog = weekLog.projectsWorkedOnInPortals[portal.name];
-      if (!projectLog) {
-        projectLog = [];
-      }
-
-      if (projectCanBeWorkedOnInPortal(project, portal)) {
-        projectLog.push(project.name);
-        weekLog.projectsWorkedOnInPortals[portal.name] = projectLog;
-
-        if (portal.hoursLeft > project.hoursLeft) {
-          portal.hoursLeft -= project.hoursLeft;
-          project.hoursLeft = 0;
-          weekLog.projectsCompleted.push(project);
-          completedProjectsIndexes.unshift(projectIndex);
-          return true;
-        } else {
-          project.hoursLeft -= portal.hoursLeft;
-          portal.hoursLeft = 0;
-        }
-      }
+    if (workPeriod.hoursLeft > project.hoursLeft) {
+      workPeriod.hoursLeft -= project.hoursLeft;
+      project.hoursLeft = 0;
+      weekLog.projectsCompleted.push(project);
+      completedProjectsIndexes.unshift(projectIndex);
+    } else {
+      project.hoursLeft -= workPeriod.hoursLeft;
+      workPeriod.hoursLeft = 0;
     }
   }
-}
-
-function projectCanBeWorkedOnInPortal(project, portal) {
-  var potentialKeys = portal.projectTypes;
-
-  var dimensionKey = dimensionKeyKit.getDimensionKeyFromProjectTypes(
-    project.projectTypes
-  );
-
-  return potentialKeys.indexOf(dimensionKey) !== -1;
 }
 
 function removeItemsAtIndexes(array, indexesHighToLow) {

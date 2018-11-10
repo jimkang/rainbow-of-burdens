@@ -1,91 +1,22 @@
 var findWhere = require('lodash.findwhere');
 var pluck = require('lodash.pluck');
 var callNextTick = require('call-next-tick');
-var curry = require('lodash.curry');
 var sb = require('standard-bail')();
-var waterfall = require('async-waterfall');
-var keyKit = require('./dimension-key-kit');
 
 function parseLists(callTrelloAPI, res, lists, parseDone) {
-  var portals;
-  var dimensions;
-  var projects;
-
-  var portalsList = findWhere(lists, { name: 'Portals' });
   var projectsList = findWhere(lists, { name: 'Projects' });
 
-  if (!portalsList) {
-    callNextTick(
-      parseDone,
-      new Error('Missing Portals list from source board.')
-    );
-  } else if (!projectsList) {
+  if (!projectsList) {
     callNextTick(
       parseDone,
       new Error('Missing Portals list from source board.')
     );
   } else {
-    waterfall(
-      [
-        curry(parsePortals)({
-          portalsListId: portalsList.id,
-          callTrelloAPI: callTrelloAPI
-        }),
-        savePortals,
-        curry(parseProjects)({
-          projectsListId: projectsList.id,
-          callTrelloAPI: callTrelloAPI
-        }),
-        saveProjects,
-        makeDimensions,
-        saveDimensions,
-        packResults
-      ],
+    parseProjects(
+      { projectsListId: projectsList.id, callTrelloAPI },
       parseDone
     );
-    // callNextTick(done, null, {portals: portals, dimensions: dimensions});
   }
-
-  function savePortals(parsed, done) {
-    portals = parsed;
-    callNextTick(done);
-  }
-
-  function saveProjects(parsed, done) {
-    projects = parsed;
-    callNextTick(done, null, projects);
-  }
-
-  function saveDimensions(parsed, done) {
-    dimensions = parsed;
-    callNextTick(done);
-  }
-
-  function packResults(done) {
-    var results = {
-      portals: portals, //.map(curry(addDimensionKitsToPortal)(dimensions)),
-      dimensions: dimensions,
-      projects: projects
-    };
-    callNextTick(done, null, results);
-  }
-}
-
-function parsePortals({ portalsListId, callTrelloAPI }, done) {
-  callTrelloAPI(
-    { path: `lists/${portalsListId}/cards` },
-    sb(parsePortalCards, done)
-  );
-
-  function parsePortalCards(res, cards) {
-    done(null, cards.map(makePortalFromCard));
-  }
-}
-
-function makePortalFromCard(card) {
-  var portal = parseNameTimeSpanString(card.name, 'hoursPerSpan');
-  portal.projectTypes = pluck(card.labels, 'name');
-  return portal;
 }
 
 function parseProjects({ projectsListId, callTrelloAPI }, done) {
@@ -97,28 +28,6 @@ function parseProjects({ projectsListId, callTrelloAPI }, done) {
 
   function parseProjectCards(res, cards) {
     callNextTick(done, null, cards.map(makeProjectFromCard));
-  }
-}
-
-function makeDimensions(projects, done) {
-  var dimensions = {};
-  projects.forEach(putProjectInDimensionsDict);
-  callNextTick(done, null, dimensions);
-
-  function putProjectInDimensionsDict(project) {
-    var dimensionKey = keyKit.getDimensionKeyFromProjectTypes(
-      project.projectTypes
-    );
-    addToArrayInDict(dimensions, dimensionKey, project);
-  }
-}
-
-function addToArrayInDict(dict, key, value) {
-  var array = dict[key];
-  if (array) {
-    array.push(value);
-  } else {
-    dict[key] = [value];
   }
 }
 
@@ -140,22 +49,5 @@ function parseNameTimeSpanString(s, timeSpanProperty) {
   }
   return result;
 }
-
-// function addDimensionKitsToPortal(dimensions, portal) {
-//   var dimensionKeysForPortal = keyKit.getPossibleDimensionKeysFromProjectTypes(
-//     portal.projectTypes
-//   );
-
-//   portal.dimensionKits = dimensionKeysForPortal.map(getDimensionKitForKey);
-//   return portal;
-
-//   function getDimensionKitForKey(key) {
-//     return {
-//       id: key.replace(/\|/g, '-'),
-//       projectTypes: keyKit.getProjectTypesFromKey(key),
-//       projects: dimensions[key] || []
-//     };
-//   }
-// }
 
 module.exports = parseLists;
