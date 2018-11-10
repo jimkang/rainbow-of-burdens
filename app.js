@@ -10,7 +10,6 @@ var findWhere = require('lodash.findwhere');
 var parseLists = require('./parse-lists');
 var renderTimeline = require('./representers/render-timeline');
 var wireProjectCountSlider = require('./representers/wire-project-count-slider');
-var dimensionKeyKit = require('./dimension-key-kit');
 var calculateCompletion = require('./calculate-completion');
 var extractCompletionDates = require('./extract-completion-dates');
 
@@ -123,28 +122,18 @@ function getDimensionsFromBoard({
     callNextTick(done);
 
     function addProjects(portal) {
-      var potentialKeys = portal.projectTypes;
-
       portal.mainProjects = [];
 
       portalsAndDimensions.projects.some(addProject);
 
       function addProject(project) {
-        var dimensionKey = dimensionKeyKit.getDimensionKeyFromProjectTypes(
-          project.projectTypes
-        );
-
-        if (potentialKeys.indexOf(dimensionKey) !== -1) {
-          if (portal.mainProjects.length < numberOfProjectsToRender) {
-            portal.mainProjects.push(project);
-          }
-
-          if (portal.mainProjects.length >= numberOfProjectsToRender) {
-            // Stop adding projects; we have enough.
-            return true;
-          }
+        if (portal.mainProjects.length < numberOfProjectsToRender) {
+          portal.mainProjects.push(project);
+          return false;
+        } else {
+          // Stop adding projects; we have enough.
+          return true;
         }
-        return false;
       }
     }
   }
