@@ -7,10 +7,7 @@ var callNextTick = require('call-next-tick');
 var CallTrelloAPI = require('./call-trello-api');
 var curry = require('lodash.curry');
 var findWhere = require('lodash.findwhere');
-var pluck = require('lodash.pluck');
 var parseLists = require('./parse-lists');
-var renderPortals = require('./representers/render-portals');
-var renderPortalButtons = require('./representers/render-portal-buttons');
 var renderTimeline = require('./representers/render-timeline');
 var wireProjectCountSlider = require('./representers/wire-project-count-slider');
 var dimensionKeyKit = require('./dimension-key-kit');
@@ -42,7 +39,6 @@ function route() {
   if (token) {
     getDimensionsFromBoard({
       token: token,
-      portalName: routeDict.portal,
       numberOfProjectsToRender: routeDict.projectcount || 1,
       breakAfterEveryNSpans: routeDict.breakAfterEveryNSpans,
       numberOfSpansInABreak: routeDict.numberOfSpansInABreak,
@@ -72,7 +68,6 @@ function route() {
 
 function getDimensionsFromBoard({
   token,
-  portalName,
   numberOfProjectsToRender,
   breakAfterEveryNSpans,
   numberOfSpansInABreak,
@@ -113,20 +108,7 @@ function getDimensionsFromBoard({
   function callRender(portalsAndDimensions, done) {
     console.log(portalsAndDimensions);
     var portalsToRender = portalsAndDimensions.portals;
-    if (portalName) {
-      portalsToRender = [findWhere(portalsToRender, { name: portalName })];
-    }
-
     portalsToRender.forEach(addProjects);
-
-    renderPortals({
-      portalData: portalsToRender
-    });
-
-    renderPortalButtons({
-      portalNames: pluck(portalsAndDimensions.portals, 'name')
-    });
-
     var completionDates = extractCompletionDates({
       timeSpanLog: portalsAndDimensions.completionEstimate,
       timeSpanUnit: timeSpanUnit,
@@ -147,9 +129,6 @@ function getDimensionsFromBoard({
 
       portalsAndDimensions.projects.some(addProject);
 
-      // keyMatches)
-      // .slice(0, numberOfProjectsToRender);
-
       function addProject(project) {
         var dimensionKey = dimensionKeyKit.getDimensionKeyFromProjectTypes(
           project.projectTypes
@@ -169,14 +148,4 @@ function getDimensionsFromBoard({
       }
     }
   }
-
-  // function cutProjects(portal) {
-  //   portal.dimensionKits.forEach(cutProjectsInDimension);
-  // }
-
-  // function cutProjectsInDimension(dimensionKit) {
-  //   if (dimensionKit && dimensionKit.projects) {
-  //     dimensionKit.projects = dimensionKit.projects.slice(0, numberOfProjectsToRender);
-  //   }
-  // }
 }
