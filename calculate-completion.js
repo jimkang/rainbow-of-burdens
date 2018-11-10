@@ -8,8 +8,7 @@ function calculateCompletion(projects) {
   while (simProjects.length > 0) {
     // Renew workPeriods each span. Do not renew projects.
     spans.push(workForASpan(simProjects, makeSimWorkPeriod(hoursPerWeek)));
-    console.log(spans.length, 'spans');
-    console.log('Remaining projects:', simProjects.map(p => p.name));
+    // console.log('Remaining projects:', simProjects.map(p => p.name));
     if (spans.length > 520) {
       break;
     }
