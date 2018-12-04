@@ -13,7 +13,7 @@ var scaleNames = [
   'interpolateInferno',
   'interpolateCool',
   //'interpolateRainbow',
-  'interpolatePiYG',
+  //'interpolatePiYG',
   //'interpolateOrRd',
   'interpolateRdYlBu'
   //'interpolateSpectral'
