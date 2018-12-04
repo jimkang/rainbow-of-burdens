@@ -2,10 +2,22 @@ var d3 = require('d3-selection');
 var accessor = require('accessor');
 var chromaticScales = require('d3-scale-chromatic');
 
-var scaleNames = Object.keys(chromaticScales).filter(name =>
-  name.startsWith('interpolate')
-);
-//var scaleNames = ['interpolateSinebow', 'interpolateMagma', 'interpolatePlasma', 'interpolateWarm', 'interpolateViridis', 'interpolateInferno', 'interpolateCool', 'interpolateRainbow'];
+//var scaleNames = Object.keys(chromaticScales).filter(name =>
+//  name.startsWith('interpolate')
+//);
+var scaleNames = [
+  'interpolateSinebow',
+  'interpolatePlasma',
+  'interpolateWarm',
+  'interpolateViridis',
+  'interpolateInferno',
+  'interpolateCool',
+  'interpolateRainbow',
+  'interpolatePiYG',
+  'interpolateOrRd',
+  'interpolateRdYlBu',
+  'interpolateSpectral'
+];
 var scale = scaleNames[~~(Math.random() * scaleNames.length)];
 console.log('scale', scale);
 var interpolateBGColor = chromaticScales[scale];
