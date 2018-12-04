@@ -26,8 +26,24 @@ a {
 
 .timespan-projects {
   margin: 0;
+  padding-left: 1.5em;
 }
 
 .project-label {
+}
+
+@media all and (max-height: 568px) {
+  body {
+    font-size: 12px;
+  }
+
+  .date-label {
+    min-width: 3em;
+    width: 3em;
+  }
+
+  .date-label .date-slash-and-year {
+    display: none;
+  }
 }
 

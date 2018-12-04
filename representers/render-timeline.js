@@ -12,11 +12,11 @@ var scaleNames = [
   'interpolateViridis',
   'interpolateInferno',
   'interpolateCool',
-  'interpolateRainbow',
+  //'interpolateRainbow',
   'interpolatePiYG',
-  'interpolateOrRd',
-  'interpolateRdYlBu',
-  'interpolateSpectral'
+  //'interpolateOrRd',
+  'interpolateRdYlBu'
+  //'interpolateSpectral'
 ];
 var scale = scaleNames[~~(Math.random() * scaleNames.length)];
 console.log('scale', scale);
@@ -43,11 +43,11 @@ function renderTimeline({ completionDates }) {
     .enter()
     .append('div')
     .classed('timespan', true);
-  newTimespans.append('text').classed('date-label', true);
+  newTimespans.append('span').classed('date-label', true);
   newTimespans.append('ul').classed('timespan-projects', true);
 
   var updateTimespans = newTimespans.merge(timespans);
-  updateTimespans.selectAll('.date-label').text(getDateText);
+  updateTimespans.selectAll('.date-label').html(getDateHTML);
   updateTimespans.style('background-color', getColorForDate);
 
   var projectRoots = updateTimespans.select('.timespan-projects');
@@ -69,16 +69,20 @@ function renderTimeline({ completionDates }) {
   }
 }
 
-function getDateText(completionDateInfo) {
+function getDateHTML(completionDateInfo) {
   return (
-    dateIntegerToString(completionDateInfo.approximateDate) +
+    dateIntegerToHTML(completionDateInfo.approximateDate) +
     ' to ' +
-    dateIntegerToString(completionDateInfo.approximateDate + oneWeekInMS)
+    dateIntegerToHTML(completionDateInfo.approximateDate + oneWeekInMS)
   );
 }
 
-function dateIntegerToString(dateInt) {
-  return new Date(dateInt).toLocaleDateString();
+function dateIntegerToHTML(dateInt) {
+  var dateString = new Date(dateInt).toLocaleDateString();
+  return `<span class="date-month-and-day">${dateString.slice(
+    0,
+    -5
+  )}</span><span class="date-slash-and-year">${dateString.slice(-5)}</span>`;
 }
 
 function getProjectText(project) {
