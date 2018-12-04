@@ -1,7 +1,7 @@
 {
-  "name": "dimensions",
+  "name": "rainbow-of-burdens",
   "version": "1.0.0",
-  "description": "View dimensions as defined in a Trello board.",
+  "description": "View rainbow-of-burdens as defined in a Trello board.",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jimkang/dimensions.git"
+    "url": "git@github.com:jimkang/rainbow-of-burdens.git"
   },
   "keywords": [],
   "author": "Jim Kang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jimkang/dimensions/issues"
+    "url": "https://github.com/jimkang/rainbow-of-burdens/issues"
   },
-  "homepage": "https://github.com/jimkang/dimensions",
+  "homepage": "https://github.com/jimkang/rainbow-of-burdens",
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "babelify": "^7.3.0",

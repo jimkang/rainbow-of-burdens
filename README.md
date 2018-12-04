@@ -1,7 +1,7 @@
-dimensions
+rainbow-of-burdens
 ==================
 
-View dimensions as defined in a Trello board.
+View a timeline projection tasks defined in a Trello board.
 
 Installation
 ------------
