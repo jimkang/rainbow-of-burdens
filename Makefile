@@ -3,9 +3,10 @@ UGLIFY = ./node_modules/.bin/uglifyjs
 TRANSFORM_SWITCH = -t [ babelify --presets [ es2015 ] ]
 
 run:
-	wzrd app.js:index.js -- \
-		-d \
-		$(TRANSFORM_SWITCH)
+	./node_modules/.bin/electron .
+	#wzrd app.js:index.js -- \
+	#	-d \
+	#	$(TRANSFORM_SWITCH)
 
 build:
 	$(BROWSERIFY) $(TRANSFORM_SWITCH) app.js | $(UGLIFY) -c -m -o index.js
@@ -19,4 +20,3 @@ pushall:
 
 prettier:
 	prettier --single-quote --write "**/*.js"
-
