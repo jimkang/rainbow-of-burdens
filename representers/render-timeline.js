@@ -16,7 +16,7 @@ var scaleNames = [
   'interpolatePiYG',
   'interpolateOrRd',
   'interpolateRdYlBu',
-  'interpolateSpectral'
+  'interpolateSpectral',
 ];
 var scale = scaleNames[~~(Math.random() * scaleNames.length)];
 console.log('scale', scale);
@@ -39,10 +39,7 @@ function renderTimeline({ completionDates }) {
     .selectAll('.timespan')
     .data(completionDates, accessor('completedInSpan'));
   timespans.exit().remove();
-  var newTimespans = timespans
-    .enter()
-    .append('div')
-    .classed('timespan', true);
+  var newTimespans = timespans.enter().append('div').classed('timespan', true);
   newTimespans.append('text').classed('date-label', true);
   newTimespans.append('ul').classed('timespan-projects', true);
 
@@ -70,6 +67,10 @@ function renderTimeline({ completionDates }) {
 }
 
 function getDateText(completionDateInfo) {
+  if (completionDateInfo.completedSpanLabel) {
+    return completionDateInfo.completedSpanLabel;
+  }
+  // TODO: Handle day timeSpanUnit case.
   return (
     dateIntegerToString(completionDateInfo.approximateDate) +
     ' to ' +

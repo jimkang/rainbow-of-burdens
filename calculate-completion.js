@@ -1,13 +1,12 @@
 var cloneDeep = require('lodash.clonedeep');
-const hoursPerWeek = 10; // TODO: Parameterize
 
-function calculateCompletion(projects) {
+function calculateCompletion({ projects, hoursPerSpan }) {
   var spans = [];
   var simProjects = projects.filter(projectIsValid).map(makeSimProject);
 
   while (simProjects.length > 0) {
     // Renew workPeriods each span. Do not renew projects.
-    spans.push(workForASpan(simProjects, makeSimWorkPeriod(hoursPerWeek)));
+    spans.push(workForASpan(simProjects, makeSimWorkPeriod(hoursPerSpan)));
     // console.log('Remaining projects:', simProjects.map(p => p.name));
     if (spans.length > 520) {
       break;
@@ -26,13 +25,13 @@ function makeSimProject(project) {
 function makeSimWorkPeriod(hoursPerWorkPeriod) {
   return {
     hoursPerSpan: hoursPerWorkPeriod,
-    hoursLeft: hoursPerWorkPeriod
+    hoursLeft: hoursPerWorkPeriod,
   };
 }
 
 function workForASpan(projects, workPeriod) {
   var weekLog = {
-    projectsCompleted: []
+    projectsCompleted: [],
   };
 
   var completedProjectsIndexes = [];

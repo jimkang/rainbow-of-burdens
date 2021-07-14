@@ -1,14 +1,12 @@
 var pluck = require('lodash.pluck');
-var toTitleCase = require('titlecase');
 var compact = require('lodash.compact');
 
 function extractCompletionDates({
   timeSpanLog,
-  timeSpanUnit,
   timeSpanMS,
   startDate,
   breakAfterEveryNSpans = -1,
-  numberOfSpansInABreak = 0
+  numberOfSpansInABreak = 0,
 }) {
   var projectsCompletedPerSpan = pluck(timeSpanLog, 'projectsCompleted');
   if (breakAfterEveryNSpans !== -1) {
@@ -19,13 +17,12 @@ function extractCompletionDates({
 
   function makeCompletionLog(projectsCompletedInSpan, spanIndex) {
     if (projectsCompletedInSpan && projectsCompletedInSpan.length > 0) {
+      var completionDate = new Date(startDateMS + timeSpanMS * spanIndex);
       return {
         completedInSpan: spanIndex,
-        completedSpanLabel: toTitleCase(timeSpanUnit + ' ' + spanIndex),
-        approximateDate: new Date(
-          startDateMS + timeSpanMS * spanIndex
-        ).getTime(),
-        completedProjects: projectsCompletedInSpan
+        completedSpanLabel: completionDate.toLocaleDateString(),
+        approximateDate: completionDate.getTime(),
+        completedProjects: projectsCompletedInSpan,
       };
     }
   }

@@ -27,11 +27,15 @@ function route() {
     routeDict: routeDict,
     store: window.localStorage,
     currentDate: new Date(),
-    tokenLifeInDays: 30
+    tokenLifeInDays: 30,
   });
 
+  var timeSpanUnit = routeDict.timeSpanUnit;
+  if (!timeSpanUnit) {
+    timeSpanUnit = 'day';
+  }
   var timeSpanMS = routeDict.timeSpanMS;
-  if (!timeSpanMS && routeDict.timeSpanUnit === 'day') {
+  if (!timeSpanMS && timeSpanUnit === 'day') {
     timeSpanMS = 24 * 60 * 60 * 1000;
   }
 
@@ -41,9 +45,9 @@ function route() {
       numberOfProjectsToRender: routeDict.projectcount || 1,
       breakAfterEveryNSpans: routeDict.breakAfterEveryNSpans,
       numberOfSpansInABreak: routeDict.numberOfSpansInABreak,
-      timeSpanUnit: routeDict.timeSpanUnit,
+      timeSpanUnit,
       timeSpanMS: timeSpanMS,
-      boardName: routeDict.board
+      boardName: routeDict.board,
     });
   } else {
     var callbackURL =
@@ -60,7 +64,7 @@ function route() {
         scope: 'read',
         expiration: '30days',
         name: 'Pipeland',
-        key: config.trello.key
+        key: config.trello.key,
       });
   }
 }
@@ -69,10 +73,14 @@ function getDimensionsFromBoard({
   token,
   breakAfterEveryNSpans,
   numberOfSpansInABreak,
-  timeSpanUnit = 'week',
+  timeSpanUnit,
   timeSpanMS = 7 * 24 * 60 * 60 * 1000,
-  boardName = 'Dimensions'
+  boardName = 'Dimensions',
 }) {
+  var hoursPerSpan = 4;
+  if (timeSpanUnit === 'week') {
+    hoursPerSpan = 20;
+  }
   var callTrelloAPI = CallTrelloAPI({ key: config.trello.key, token: token });
 
   waterfall(
@@ -81,7 +89,7 @@ function getDimensionsFromBoard({
       getLists,
       curry(parseLists)(callTrelloAPI),
       getCompletionTimes,
-      callRender
+      callRender,
     ],
     handleError
   );
@@ -98,7 +106,7 @@ function getDimensionsFromBoard({
   function getCompletionTimes(projects, done) {
     var results = {
       projects,
-      completionEstimate: calculateCompletion(projects)
+      completionEstimate: calculateCompletion({ projects, hoursPerSpan }),
     };
     console.log('completion estimate', results.completionEstimate);
     callNextTick(done, null, results);
@@ -108,11 +116,10 @@ function getDimensionsFromBoard({
     console.log(results);
     var completionDates = extractCompletionDates({
       timeSpanLog: results.completionEstimate,
-      timeSpanUnit: timeSpanUnit,
-      timeSpanMS: timeSpanMS,
+      timeSpanMS,
       startDate: new Date(),
       breakAfterEveryNSpans: breakAfterEveryNSpans,
-      numberOfSpansInABreak: numberOfSpansInABreak
+      numberOfSpansInABreak: numberOfSpansInABreak,
     });
     console.log('completionDates:', completionDates);
     renderTimeline({ completionDates: completionDates });
