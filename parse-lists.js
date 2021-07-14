@@ -46,6 +46,9 @@ function parseNameTimeSpanString(s, timeSpanProperty) {
   }
   if (nameTimeSpanPair.length > 1) {
     result[timeSpanProperty] = nameTimeSpanPair[1];
+  } else {
+    // Assume 1 hour.
+    result[timeSpanProperty] = 1;
   }
   return result;
 }
