@@ -44,6 +44,7 @@
     "lodash.pluck": "^3.1.2",
     "lodash.values": "^4.3.0",
     "lodash.without": "^4.4.0",
+    "oknok": "^3.0.0",
     "qs": "^6.3.0",
     "standard-bail": "^2.0.1",
     "titlecase": "^1.1.2"
